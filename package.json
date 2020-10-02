@@ -1,0 +1,70 @@
+{
+  "name": "react-forms",
+  "version": "1.0.0",
+  "description": "Creating declarative dynamic forms",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "scripts": {
+    "build": "rm -rf dist/ && rollup -c",
+    "test": "jest"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Mithyalabs Team",
+  "license": "ISC",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.9.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.40",
+    "@material-ui/pickers": "^3.2.8",
+    "axios": "^0.19.2",
+    "formik": "^2.1.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-highlight-words": "^0.16.0",
+    "react-places-autocomplete": "^7.2.1"
+  },
+  "devDependencies": {
+    "@material-ui/core": "^4.9.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.40",
+    "@material-ui/pickers": "^3.2.8",
+    "@types/autosuggest-highlight": "^3.1.0",
+    "@types/jest": "^24.0.25",
+    "@types/lodash": "^4.14.149",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-highlight-words": "^0.16.0",
+    "@types/react-places-autocomplete": "^7.2.6",
+    "@types/react-test-renderer": "^16.9.1",
+    "axios": "^0.19.2",
+    "formik": "^2.1.1",
+    "jest": "^24.9.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-highlight-words": "^0.16.0",
+    "react-places-autocomplete": "^7.2.1",
+    "react-scripts-ts": "^3.1.0",
+    "react-test-renderer": "^16.12.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "react-dropzone": "^11.2.0"
+  }
+}
