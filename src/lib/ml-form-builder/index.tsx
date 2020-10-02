@@ -5,8 +5,7 @@ import CircularProgress, { CircularProgressProps } from '@material-ui/core/Circu
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { FormikValues } from 'formik';
-import { MUITextField, MUISelectField, MUICheckBox, MUISwitch, MUIRadio, MUIPlaceSuggest, MUIAutocomplete, MUIFieldArray, MUIDropDownTimePicker, MUIFileInput, MUIDropFile } from './lib';
-import { MUIDatePicker, MUITimePicker } from './lib/MUIDateTimePicker';
+import { MUITextField, MUISelectField, MUICheckBox, MUISwitch, MUIRadio , MUIFieldArray, MUIFileInput } from './lib';
 import { getConditionalProps, TFieldConditions } from './lib/ConditionalOperation';
 
 
@@ -97,16 +96,10 @@ attachField('text', <MUITextField />, { type: 'text' });
 attachField('password', <MUITextField />, { type: 'password' });
 attachField('select', <MUISelectField />);
 attachField('checkbox', <MUICheckBox />);
-attachField('date-picker', <MUIDatePicker />, { variant: 'inline', label: 'Select Date' });
-attachField('time-picker', <MUITimePicker />, { variant: 'inline', label: 'Select Time' });
-attachField('location-suggest', <MUIPlaceSuggest />);
 attachField('switch', <MUISwitch />);
 attachField('radio', <MUIRadio />);
-attachField('autocomplete', < MUIAutocomplete />);
 attachField('array', <MUIFieldArray />);
-attachField('time-picker-select', <MUIDropDownTimePicker />)
 attachField('file', <MUIFileInput />)
-attachField('dropFile', <MUIDropFile />)
 
 
 export const BuildFormRow: React.FC<FormRowProps> = props => {
