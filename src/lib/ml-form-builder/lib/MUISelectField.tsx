@@ -17,11 +17,11 @@ export interface IMUISelectProps extends SelectProps {
     inputLabelProps?: object
 }
 
-export interface IProps extends IFieldProps {
+export interface ISelectProps extends IFieldProps {
     fieldProps?: IMUISelectProps
 }
 
-export const MUISelectField: React.FC<IProps> = (props) => {
+export const MUISelectField: React.FC<ISelectProps> = (props) => {
     const { fieldConfig = {} as FormConfig, formikProps = {} as FormikValues, fieldProps = {} as IMUISelectProps } = props;
     const { label,
         options = [],

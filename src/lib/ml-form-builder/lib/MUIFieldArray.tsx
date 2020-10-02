@@ -18,7 +18,7 @@ interface IFieldArrayProps {
     removeButtonProps?: IconButtonProps
     textFieldProps?: TextFieldProps
 }
-export interface IProps extends IFieldProps {
+export interface IFieldsArrayProps extends IFieldProps {
     fieldProps?: IFieldArrayProps
 }
 
@@ -39,7 +39,7 @@ export interface IProps extends IFieldProps {
     )
 } */
 
-export const MUIFieldArray: React.FC<IProps> = (props) => {
+export const MUIFieldArray: React.FC<IFieldsArrayProps> = (props) => {
     const { formikProps = {} as FormikValues, fieldProps = {} as IFieldArrayProps } = props;
     const { itemType, addButtonText = 'Add', addButtonProps, addButton, removeButton, removeButtonProps, textFieldProps = {} } = fieldProps;
     const values = get(formikProps, `values.${fieldProps.name}`);

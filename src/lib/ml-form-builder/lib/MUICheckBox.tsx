@@ -17,10 +17,10 @@ export interface IMUICheckboxProps extends CheckboxProps {
     formHelperTextProps?: FormHelperTextProps
 
 }
-export interface IProps extends IFieldProps {
+export interface ICheckboxProps extends IFieldProps {
     fieldProps?: IMUICheckboxProps
 }
-export const MUICheckBox: React.FC<IProps> = (props) => {
+export const MUICheckBox: React.FC<ICheckboxProps> = (props) => {
     const { fieldConfig = {} as FormConfig, formikProps = {} as FormikValues, fieldProps = {} as IMUICheckboxProps } = props;
     const { label, helperText, options = [], header, headerProps, checkGroupProps, formControlProps, formHelperTextProps, formControlLabelProps, ...checkboxProps } = fieldProps;
     const fieldError = getFieldError((fieldProps.name || ''), formikProps);

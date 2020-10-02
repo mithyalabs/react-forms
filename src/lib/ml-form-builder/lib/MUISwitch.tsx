@@ -9,11 +9,11 @@ export interface IMUISwitchProps extends SwitchProps {
     label?: string
 }
 
-export interface IProps extends IFieldProps {
+export interface ISwitchProps extends IFieldProps {
     fieldProps?: IMUISwitchProps
 }
 
-export const MUISwitch: React.FC<IProps> = (props) => {
+export const MUISwitch: React.FC<ISwitchProps> = (props) => {
     const { formikProps = {} as FormikValues, fieldProps = {} as IMUISwitchProps, isReadOnly = false } = props;
     const { label, ...switchProps } = fieldProps;
     const value = get(formikProps, `values.${fieldProps.name}`);
