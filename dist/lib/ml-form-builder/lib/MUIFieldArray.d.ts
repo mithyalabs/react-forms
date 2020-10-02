@@ -12,8 +12,8 @@ interface IFieldArrayProps {
     removeButtonProps?: IconButtonProps;
     textFieldProps?: TextFieldProps;
 }
-export interface IProps extends IFieldProps {
+export interface IFieldsArrayProps extends IFieldProps {
     fieldProps?: IFieldArrayProps;
 }
-export declare const MUIFieldArray: React.FC<IProps>;
+export declare const MUIFieldArray: React.FC<IFieldsArrayProps>;
 export {};

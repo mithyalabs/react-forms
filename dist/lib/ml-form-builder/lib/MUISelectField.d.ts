@@ -13,7 +13,7 @@ export interface IMUISelectProps extends SelectProps {
     menuItemProps?: object;
     inputLabelProps?: object;
 }
-export interface IProps extends IFieldProps {
+export interface ISelectProps extends IFieldProps {
     fieldProps?: IMUISelectProps;
 }
-export declare const MUISelectField: React.FC<IProps>;
+export declare const MUISelectField: React.FC<ISelectProps>;
