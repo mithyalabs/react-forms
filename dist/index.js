@@ -6,8 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var _ = require('lodash');
-var ___default = _interopDefault(_);
+var lodash = require('lodash');
 var Button = _interopDefault(require('@material-ui/core/Button'));
 var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
 var styles = require('@material-ui/core/styles');
@@ -94,18 +93,53 @@ function clsx () {
 }
 
 var getMenuOptions = function (options) {
-    return _.map(options, function (item) {
-        if (_.isString(item))
+    return lodash.map(options, function (item) {
+        if (lodash.isString(item))
             return { name: item, value: item };
         return item;
     });
 };
 var getFieldError = function (fieldName, formikProps) {
-    var fieldError = _.get(formikProps, "errors." + fieldName);
-    var isTouched = _.get(formikProps, "touched." + fieldName);
+    var fieldError = lodash.get(formikProps, "errors." + fieldName);
+    var isTouched = lodash.get(formikProps, "touched." + fieldName);
     if (!isTouched && formikProps.submitCount < 1)
         return '';
     return fieldError;
+};
+var processFiles = function (files, readAs) {
+    var allFiles = [];
+    var remFiles = [];
+    //@ts-ignore
+    Array.from(files).forEach(function (file) {
+        if (file.type.includes('image')) {
+            var reader_1 = new FileReader();
+            //@ts-ignore
+            reader_1.onload = function () {
+                var fileInfo = {
+                    name: file.name,
+                    type: file.type,
+                    size: Math.round(file.size / 1000) + ' kB',
+                    base64: file.type.includes('image') ? reader_1.result : null,
+                    file: file,
+                };
+                allFiles.push(fileInfo);
+                if ((allFiles.length + remFiles.length) === files.length) {
+                    return (allFiles.concat(remFiles));
+                }
+            };
+            reader_1[readAs || 'readAsDataURL'](file);
+        }
+        else {
+            remFiles.push(file);
+            if ((allFiles.length + remFiles.length) === files.length) {
+                return (allFiles.concat(remFiles));
+            }
+        }
+    });
+    return [];
+};
+var setValue = function (value, formikProps, fieldProps) {
+    formikProps.setFieldValue(lodash.get(fieldProps, 'name'), value);
 };
 
 var MUIReadOnly = function (props) {
@@ -117,8 +151,8 @@ var MUIReadOnly = function (props) {
 var MUITextField = function (props) {
     var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || '', onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: _.get(formikProps, "values." + fieldProps.name) || '' });
-    console.log('Text field props read only', isReadOnly);
+    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || '', onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: lodash.get(formikProps, "values." + fieldProps.name) || '' });
+    // console.log('Text field props read only', isReadOnly);
     if (isReadOnly) {
         return (React.createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
@@ -130,16 +164,16 @@ var MUISelectField = function (props) {
     var label = fieldProps.label, _d = fieldProps.options, options = _d === void 0 ? [] : _d, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _e = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _e === void 0 ? {} : _e, _f = fieldProps.menuItemProps, menuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.inputLabelProps, inputLabelProps = _g === void 0 ? {} : _g, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
     var labelId = fieldConfig.id + "_label";
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    var emptyItemText = (_.isString(emptyItem) ? emptyItem : 'None');
+    var emptyItemText = (lodash.isString(emptyItem) ? emptyItem : 'None');
     var menuOptions = getMenuOptions(options);
-    var value = _.get(formikProps, "values." + fieldProps.name) || ((selectProps.multiple) ? [] : '');
+    var value = lodash.get(formikProps, "values." + fieldProps.name) || ((selectProps.multiple) ? [] : '');
     return (React.createElement(core.FormControl, __assign({ error: !!fieldError }, formControlProps),
         label &&
             (React.createElement(core.InputLabel, __assign({ id: labelId }, inputLabelProps), label)),
         React.createElement(core.Select, __assign({ labelId: labelId, id: fieldConfig.id, value: value, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, selectProps),
             (emptyItem) &&
                 (React.createElement(core.MenuItem, __assign({ value: '' }, emptyMenuItemProps), emptyItemText)),
-            _.map(menuOptions, function (item, index) { return (React.createElement(core.MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); })),
+            lodash.map(menuOptions, function (item, index) { return (React.createElement(core.MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); })),
         (fieldError || fieldProps.helperText) &&
             (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError || fieldProps.helperText))));
 };
@@ -148,13 +182,13 @@ var MUICheckBox = function (props) {
     var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
     var label = fieldProps.label, helperText = fieldProps.helperText, _d = fieldProps.options, options = _d === void 0 ? [] : _d, header = fieldProps.header, headerProps = fieldProps.headerProps, checkGroupProps = fieldProps.checkGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, formControlLabelProps = fieldProps.formControlLabelProps, checkboxProps = __rest(fieldProps, ["label", "helperText", "options", "header", "headerProps", "checkGroupProps", "formControlProps", "formHelperTextProps", "formControlLabelProps"]);
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    var value = _.get(formikProps, "values." + fieldProps.name);
+    var value = lodash.get(formikProps, "values." + fieldProps.name);
     var menuOptions = getMenuOptions(options);
     return (React.createElement(core.FormControl, __assign({ error: !!fieldError }, formControlProps),
         (header) &&
             (React.createElement(core.FormLabel, __assign({}, headerProps), header)),
-        React.createElement(core.FormGroup, __assign({}, checkGroupProps), (!_.isEmpty(menuOptions)) ?
-            (_.map(menuOptions, function (item, index) { return (React.createElement(core.FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, control: React.createElement(core.Checkbox, __assign({ checked: (_.indexOf(value, item.value) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))), label: item.name || '' }, formControlLabelProps))); })) : (React.createElement(core.FormControlLabel, __assign({ control: React.createElement(core.Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: label || '' }, formControlLabelProps)))),
+        React.createElement(core.FormGroup, __assign({}, checkGroupProps), (!lodash.isEmpty(menuOptions)) ?
+            (lodash.map(menuOptions, function (item, index) { return (React.createElement(core.FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, control: React.createElement(core.Checkbox, __assign({ checked: (lodash.indexOf(value, item.value) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))), label: item.name || '' }, formControlLabelProps))); })) : (React.createElement(core.FormControlLabel, __assign({ control: React.createElement(core.Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: label || '' }, formControlLabelProps)))),
         (fieldError || helperText) &&
             (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText))));
 };
@@ -162,24 +196,24 @@ var MUICheckBox = function (props) {
 var MUISwitch = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
     var label = fieldProps.label, switchProps = __rest(fieldProps, ["label"]);
-    var value = _.get(formikProps, "values." + fieldProps.name);
+    var value = lodash.get(formikProps, "values." + fieldProps.name);
     var handleOnChange = function () {
         formikProps.setFieldValue(fieldProps.name, !value);
     };
-    console.log('Switch props', __assign({}, __assign(__assign({}, switchProps), { disabled: (switchProps.disabled || isReadOnly) })));
+    // console.log('Switch props', { ...{ ...switchProps, disabled: (switchProps.disabled || isReadOnly) } });
     return (React.createElement(core.FormControlLabel, { control: React.createElement(core.Switch, __assign({ checked: !!value, onChange: handleOnChange, onBlur: formikProps.handleBlur, inputProps: { 'aria-label': 'secondary checkbox' }, value: value }, __assign(__assign({}, switchProps), { disabled: (switchProps.disabled || isReadOnly) }))), label: label || '' }));
 };
 
 var MUIRadio = function (props) {
     var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b;
     var header = fieldProps.header, _c = fieldProps.options, options = _c === void 0 ? [] : _c, headerProps = fieldProps.headerProps, helperText = fieldProps.helperText, radioProps = fieldProps.radioProps, radioGroupProps = fieldProps.radioGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps;
-    var fieldValue = _.get(formikProps, "values." + fieldProps.name) || '';
+    var fieldValue = lodash.get(formikProps, "values." + fieldProps.name) || '';
     var menuOptions = getMenuOptions(options);
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
     return (React.createElement(core.FormControl, __assign({ error: !!fieldError }, formControlProps),
         (header) &&
             (React.createElement(core.FormLabel, __assign({}, headerProps), header)),
-        React.createElement(core.RadioGroup, __assign({ name: fieldProps.name, value: fieldValue, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, radioGroupProps), _.map(menuOptions, function (option, index) {
+        React.createElement(core.RadioGroup, __assign({ name: fieldProps.name, value: fieldValue, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, radioGroupProps), lodash.map(menuOptions, function (option, index) {
             var value = option.value, name = option.name, rest = __rest(option, ["value", "name"]);
             return (React.createElement(core.FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', label: name, control: React.createElement(core.Radio, __assign({}, radioProps)) }, rest)));
         })),
@@ -205,7 +239,7 @@ var MUIRadio = function (props) {
 var MUIFieldArray = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
     var itemType = fieldProps.itemType, _c = fieldProps.addButtonText, addButtonText = _c === void 0 ? 'Add' : _c, addButtonProps = fieldProps.addButtonProps, addButton = fieldProps.addButton, removeButton = fieldProps.removeButton, removeButtonProps = fieldProps.removeButtonProps, _d = fieldProps.textFieldProps, textFieldProps = _d === void 0 ? {} : _d;
-    var values = _.get(formikProps, "values." + fieldProps.name);
+    var values = lodash.get(formikProps, "values." + fieldProps.name);
     var itemComponentConfig = getComponentConfig(itemType);
     var classes = useStyles();
     return (React__default.createElement(formik.FieldArray, { name: fieldProps.name, render: function (arrayHelpers) { return (React__default.createElement("div", null,
@@ -231,52 +265,20 @@ var useStyles = styles.makeStyles(function () {
 
 var MUIFileInput = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
-    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onChange = fieldProps.onChange, wrapWith = fieldProps.wrapWith;
-    var setValue = function (files) {
-        if (typeof formikProps.setFieldValue === "function") {
-            formikProps.setFieldValue(___default.get(fieldProps, 'name'), files);
-        }
-    };
+    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps;
     var classes = useStyles$1();
-    var handleChange = function (e) {
-        // e.persist()
-        // onChange?.(e)
-        var files = e.target.files || new FileList();
-        if (onChange) {
-            onChange(files);
-            setValue(files);
+    var handleChange = function (event) {
+        var files = event.target.files || new FileList();
+        if (onFilesChange) {
+            onFilesChange(files);
+            setValue(files, formikProps, fieldProps);
         }
-        var allFiles = [];
-        var remFiles = [];
-        Array.from(files).forEach(function (file) {
-            if (file.type.includes('image')) {
-                var reader_1 = new FileReader();
-                reader_1.onload = function () {
-                    var fileInfo = {
-                        name: file.name,
-                        type: file.type,
-                        size: Math.round(file.size / 1000) + ' kB',
-                        base64: file.type.includes('image') ? reader_1.result : null,
-                        file: file,
-                    };
-                    allFiles.push(fileInfo);
-                    if ((allFiles.length + remFiles.length) === files.length) {
-                        onDone === null || onDone === void 0 ? void 0 : onDone(allFiles, remFiles);
-                        setValue(allFiles.concat(remFiles));
-                    }
-                };
-                reader_1[readAs || 'readAsDataURL'](file);
-            }
-            else {
-                remFiles.push(file);
-                if ((allFiles.length + remFiles.length) === files.length) {
-                    onDone === null || onDone === void 0 ? void 0 : onDone(allFiles, remFiles);
-                    setValue(allFiles.concat(remFiles));
-                }
-            }
-        });
+        var finalFiles = processFiles(files, readAs);
+        onDone === null || onDone === void 0 ? void 0 : onDone(finalFiles);
+        setValue(finalFiles, formikProps, fieldProps);
     };
-    return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(React__default.createElement("input", { type: "file", disabled: disabled, multiple: multiple, className: classes.invisibleInput, title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange })) : React__default.createElement("input", { type: "file", disabled: disabled, multiple: multiple, className: invisible ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange })));
+    var input = React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: invisible || wrapWith ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps));
+    return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input));
 };
 var useStyles$1 = core.makeStyles(function () { return core.createStyles({
     invisibleInput: { opacity: 0, width: '100%', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, cursor: 'pointer' }
@@ -296,13 +298,13 @@ var compare = function (value1, operator, value2) {
     }
 };
 var getConditionalOutput = function (itemCondition, formikProps) {
-    var itemValue = _.get(formikProps, "values." + itemCondition.key);
+    var itemValue = lodash.get(formikProps, "values." + itemCondition.key);
     return compare(itemValue, itemCondition.operator, itemCondition.compareValue);
 };
 var hasTruthyValue = function (logicalOperation, values, formikProps) {
     if (logicalOperation === void 0) { logicalOperation = 'AND'; }
     var outputResult = false;
-    _.forEach(values, function (item, index) {
+    lodash.forEach(values, function (item, index) {
         var result = getConditionalOutput(item, formikProps);
         if (logicalOperation === 'AND' && !result) {
             outputResult = false;
@@ -321,7 +323,7 @@ var hasTruthyValue = function (logicalOperation, values, formikProps) {
 };
 var getConditionalProps = function (itemConfig, formikProps) {
     var conditionInstructions = itemConfig.condition;
-    if (!conditionInstructions || _.isEmpty(conditionInstructions.values)) {
+    if (!conditionInstructions || lodash.isEmpty(conditionInstructions.values)) {
         return { finalProps: {} };
     }
     var isValidCondition = hasTruthyValue(conditionInstructions.logicOpn, conditionInstructions.values || [], formikProps);
@@ -346,15 +348,15 @@ var getComponentConfig = function (type) {
     return ComponentMapConfig[type];
 };
 var attachField = function (type, component, props) {
-    if (_.isArray(type)) {
-        _.map(type, function (item) { return ComponentMapConfig[item] = { component: component, props: props }; });
+    if (lodash.isArray(type)) {
+        lodash.map(type, function (item) { return ComponentMapConfig[item] = { component: component, props: props }; });
     }
     else
         ComponentMapConfig[type] = { component: component, props: props };
 };
 var setDefaultProps = function (type, props) {
-    if (_.isArray(type)) {
-        _.map(type, function (item) { return ComponentMapConfig[item].props = __assign(__assign({}, ComponentMapConfig[item].props), props); });
+    if (lodash.isArray(type)) {
+        lodash.map(type, function (item) { return ComponentMapConfig[item].props = __assign(__assign({}, ComponentMapConfig[item].props), props); });
     }
     else
         ComponentMapConfig[type].props = __assign(__assign({}, ComponentMapConfig[type].props), props);
@@ -369,12 +371,12 @@ attachField('array', React.createElement(MUIFieldArray, null));
 attachField('file', React.createElement(MUIFileInput, null));
 var BuildFormRow = function (props) {
     var schema = props.schema, rowId = props.rowId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.settings, settings = _b === void 0 ? { horizontalSpacing: 10, verticalSpacing: 10, columnHorizontalPadding: 0, isReadOnly: false } : _b;
-    var columnItems = _.get(schema, 'columns');
-    var rowSettings = __assign(__assign({}, settings), _.get(schema, 'settings'));
-    var colItems = (_.isArray(schema) ? schema : ((_.isArray(columnItems) ? columnItems : [schema])));
+    var columnItems = lodash.get(schema, 'columns');
+    var rowSettings = __assign(__assign({}, settings), lodash.get(schema, 'settings'));
+    var colItems = (lodash.isArray(schema) ? schema : ((lodash.isArray(columnItems) ? columnItems : [schema])));
     var classes = useFormStyles();
     var rowStyle = { marginBottom: (rowSettings.verticalSpacing || 10) };
-    return (React.createElement("div", { className: classes.row, style: rowStyle }, _.map(colItems, function (item, index) {
+    return (React.createElement("div", { className: classes.row, style: rowStyle }, lodash.map(colItems, function (item, index) {
         var componentConfig = ComponentMapConfig[item.type];
         var horizontalSpacing = (index === (colItems.length - 1)) ? 0 : (rowSettings.horizontalSpacing || 10);
         if (!componentConfig)
@@ -384,17 +386,17 @@ var BuildFormRow = function (props) {
         var Component = componentConfig.component;
         if (conditionalProps.hidden === true)
             return React.createElement("div", { key: rowId + "_field_" + index });
-        return (React.createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: (item.flex || 1), marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding }, item.styles) }, (settings.isReadOnly && item.readOnlyProps && _.isFunction(item.readOnlyProps.renderer)) ?
+        return (React.createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: (item.flex || 1), marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding }, item.styles) }, (settings.isReadOnly && item.readOnlyProps && lodash.isFunction(item.readOnlyProps.renderer)) ?
             (item.readOnlyProps.renderer({ formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })) :
             React.cloneElement(Component, { fieldProps: fieldProps, formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })));
     })));
 };
 var getUpdateSchema = function (schema, formId) {
-    return _.map(schema, function (schemaItem) {
-        if (_.isArray(schemaItem)) {
-            return _.map(schemaItem, function (item) { return (__assign(__assign({}, item), { id: formId + "_" + _.uniqueId() })); });
+    return lodash.map(schema, function (schemaItem) {
+        if (lodash.isArray(schemaItem)) {
+            return lodash.map(schemaItem, function (item) { return (__assign(__assign({}, item), { id: formId + "_" + lodash.uniqueId() })); });
         }
-        return __assign(__assign({}, schemaItem), { id: formId + "_" + _.uniqueId() });
+        return __assign(__assign({}, schemaItem), { id: formId + "_" + lodash.uniqueId() });
     });
 };
 var MLFormContent = function (props) {
@@ -403,7 +405,7 @@ var MLFormContent = function (props) {
     useEffect(function () {
         setFormSchema(getUpdateSchema(schema, formId));
     }, [schema]);
-    return (React.createElement(React.Fragment, null, _.map(formSchema, function (configRow, index) {
+    return (React.createElement(React.Fragment, null, lodash.map(formSchema, function (configRow, index) {
         var rowId = formId + "_row_" + index;
         return (React.createElement(BuildFormRow, { key: rowId, rowId: rowId, schema: configRow, formikProps: formikProps, settings: settings }));
     })));
@@ -484,5 +486,9 @@ exports.ReactForm = ReactForm;
 exports.attachField = attachField;
 exports.default = index;
 exports.getComponentConfig = getComponentConfig;
+exports.getFieldError = getFieldError;
+exports.getMenuOptions = getMenuOptions;
+exports.processFiles = processFiles;
 exports.setDefaultProps = setDefaultProps;
+exports.setValue = setValue;
 //# sourceMappingURL=index.js.map
