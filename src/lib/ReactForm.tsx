@@ -3,7 +3,7 @@ import { MLFormBuilder, RowSchema, IFormActionProps, BuilderSettingsProps } from
 import { Formik, FormikValues } from 'formik';
 export * from './ml-form-builder';
 export * from './ml-form-builder/lib';
-
+export * from './ml-form-builder/Utils'
 
 
 /**

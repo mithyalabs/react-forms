@@ -3,6 +3,7 @@ import { RowSchema, IFormActionProps, BuilderSettingsProps } from './ml-form-bui
 import { FormikValues } from 'formik';
 export * from './ml-form-builder';
 export * from './ml-form-builder/lib';
+export * from './ml-form-builder/Utils';
 /**
  * type1 - (text, password, email, number) will render text field with respective type, default text
  * type2 - select/multiselect - options([{key:val}] or [string])

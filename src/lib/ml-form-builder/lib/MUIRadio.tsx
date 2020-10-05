@@ -6,9 +6,9 @@ import { get, map } from 'lodash';
 import { MenuOptionObject, getMenuOptions, getFieldError } from '../Utils';
 
 export type MenuOptionObj = MenuOptionObject & { controlProps?: FormControlLabelProps };
-export type MenuOptions = Array<string> | Array<MenuOptionObj>;
+export type RadioMenuOptions = Array<string> | Array<MenuOptionObj>;
 export interface IMUIRadioProps {
-    options?: MenuOptions
+    options?: RadioMenuOptions
     header?: string
     name?: string
     id?: string,
