@@ -2,23 +2,23 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
 import _ from 'lodash';
 import { FormikValues } from 'formik';
-import { setValue, processFiles, ReadAsType } from '../Utils';
 import { IFieldProps } from '..';
+import { setValue, ReadAsType, processFilesWithCallback } from '../Utils';
+
 
 export interface IMUIFileInputProps {
-	name?: string
 	readAs?: ReadAsType
+	encoding?: string
 	disabled?: boolean
 	multiple?: boolean
 	accept?: string
 	disableDefaultTooltip?: boolean
 	invisible?: boolean
 	onFilesChange?: (files: FileList) => void
-	onDone?: (files: TFile[], remFiles?: TFile[]) => void
-	/* File for when multiple is false and File[] for when multiple is true */
+	onDone?: (imgFiles: TFile[], remFiles?: File[]) => void
 	wrapWith?: (input: JSX.Element) => JSX.Element
 	/* Function passed to wrapWith should take the input Element and return the same within the wrapped element.
-	The input element is always invisible if wrapWith is provided*/
+	The input element is always invisible if wrapWith is provided */
 	nativeInputProps?: React.InputHTMLAttributes<{}>
 }
 
@@ -34,7 +34,7 @@ export interface TFile {
 	file: File
 }
 
-export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
+export const MUIFileInput: React.FC<IFileInputProps> = (props: IFileInputProps) => {
 	const { formikProps = {} as FormikValues, fieldProps = {} as IMUIFileInputProps } = props;
 	const {
 		onDone,
@@ -46,9 +46,10 @@ export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
 		disabled,
 		onFilesChange,
 		wrapWith,
-		nativeInputProps
+		nativeInputProps,
+		encoding = 'utf-8'
 	} = fieldProps
-	
+
 	const classes = useStyles();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,9 +58,13 @@ export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
 			onFilesChange(files);
 			setValue(files, formikProps, fieldProps)
 		}
-		const finalFiles = processFiles(files, readAs)
-		onDone?.(finalFiles)
-		setValue(finalFiles, formikProps, fieldProps)
+		processFilesWithCallback(files, (prop: { imgs: TFile[], rem: any[] }) => {
+			const { imgs, rem } = prop
+			onDone?.(imgs, rem)
+			const files = ([] as TFile[]).concat(imgs || []).concat(rem || [])
+			setValue(files, formikProps, fieldProps)
+		}, readAs, encoding)
+
 	}
 
 	const input = <input type="file" disabled={disabled}
@@ -81,4 +86,3 @@ export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
 const useStyles = makeStyles<Theme>(() => createStyles({
 	invisibleInput: { opacity: 0, width: '100%', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, cursor: 'pointer' }
 }))
-
