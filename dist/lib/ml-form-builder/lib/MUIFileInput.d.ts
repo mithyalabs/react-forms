@@ -1,16 +1,16 @@
 import React from 'react';
-import { ReadAsType } from '../Utils';
 import { IFieldProps } from '..';
+import { ReadAsType } from '../Utils';
 export interface IMUIFileInputProps {
-    name?: string;
     readAs?: ReadAsType;
+    encoding?: string;
     disabled?: boolean;
     multiple?: boolean;
     accept?: string;
     disableDefaultTooltip?: boolean;
     invisible?: boolean;
     onFilesChange?: (files: FileList) => void;
-    onDone?: (files: TFile[], remFiles?: TFile[]) => void;
+    onDone?: (imgFiles: TFile[], remFiles?: File[]) => void;
     wrapWith?: (input: JSX.Element) => JSX.Element;
     nativeInputProps?: React.InputHTMLAttributes<{}>;
 }

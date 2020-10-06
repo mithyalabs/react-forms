@@ -99,37 +99,33 @@ var getFieldError = function (fieldName, formikProps) {
         return '';
     return fieldError;
 };
-var processFiles = function (files, readAs) {
-    var allFiles = [];
+var processFilesWithCallback = function (files, callback, readAs, encoding) {
+    var imgFiles = [];
     var remFiles = [];
-    //@ts-ignore
     Array.from(files).forEach(function (file) {
-        if (file.type.includes('image')) {
-            var reader_1 = new FileReader();
-            //@ts-ignore
-            reader_1.onload = function () {
-                var fileInfo = {
-                    name: file.name,
-                    type: file.type,
-                    size: Math.round(file.size / 1000) + ' kB',
-                    base64: file.type.includes('image') ? reader_1.result : null,
-                    file: file,
-                };
-                allFiles.push(fileInfo);
-                if ((allFiles.length + remFiles.length) === files.length) {
-                    return (allFiles.concat(remFiles));
-                }
+        var reader = new FileReader();
+        reader.onload = function () {
+            var fileInfo = {
+                name: file.name,
+                type: file.type,
+                size: Math.round(file.size / 1024) + ' kB',
+                base64: file.type.includes('image') ? reader.result : null,
+                file: file,
             };
-            reader_1[readAs || 'readAsDataURL'](file);
-        }
-        else {
-            remFiles.push(file);
-            if ((allFiles.length + remFiles.length) === files.length) {
-                return (allFiles.concat(remFiles));
+            if (file.type.includes('image')) {
+                imgFiles.push(fileInfo);
             }
-        }
+            else {
+                remFiles.push(file);
+            }
+            if (imgFiles.length + remFiles.length === files.length) {
+                callback({ imgs: imgFiles, rem: remFiles });
+            }
+        };
+        reader[readAs || 'readAsDataURL'](file, encoding);
+        // This works but remember only readAsText can take encoding as a parameter. Might want to mention this in the documentation.
+        console.log(imgFiles, remFiles);
     });
-    return [];
 };
 var setValue = function (value, formikProps, fieldProps) {
     formikProps.setFieldValue(get(fieldProps, 'name'), value);
@@ -258,7 +254,7 @@ var useStyles = makeStyles(function () {
 
 var MUIFileInput = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
-    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps;
+    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _c = fieldProps.encoding, encoding = _c === void 0 ? 'utf-8' : _c;
     var classes = useStyles$1();
     var handleChange = function (event) {
         var files = event.target.files || new FileList();
@@ -266,9 +262,12 @@ var MUIFileInput = function (props) {
             onFilesChange(files);
             setValue(files, formikProps, fieldProps);
         }
-        var finalFiles = processFiles(files, readAs);
-        onDone === null || onDone === void 0 ? void 0 : onDone(finalFiles);
-        setValue(finalFiles, formikProps, fieldProps);
+        processFilesWithCallback(files, function (prop) {
+            var imgs = prop.imgs, rem = prop.rem;
+            onDone === null || onDone === void 0 ? void 0 : onDone(imgs, rem);
+            var files = [].concat(imgs || []).concat(rem || []);
+            setValue(files, formikProps, fieldProps);
+        }, readAs, encoding);
     };
     var input = React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: invisible || wrapWith ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps));
     return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input));
@@ -464,5 +463,5 @@ var ReactForm = function (props) {
 var index = './lib/ReactForm';
 
 export default index;
-export { BuildFormRow, MLFormAction, MLFormBuilder, MLFormContent, MUICheckBox, MUIFieldArray, MUIFileInput, MUIRadio, MUIReadOnly, MUISelectField, MUISwitch, MUITextField, ReactForm, attachField, getComponentConfig, getFieldError, getMenuOptions, processFiles, setDefaultProps, setValue };
+export { BuildFormRow, MLFormAction, MLFormBuilder, MLFormContent, MUICheckBox, MUIFieldArray, MUIFileInput, MUIRadio, MUIReadOnly, MUISelectField, MUISwitch, MUITextField, ReactForm, attachField, getComponentConfig, getFieldError, getMenuOptions, processFilesWithCallback, setDefaultProps, setValue };
 //# sourceMappingURL=index.es.js.map
