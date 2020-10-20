@@ -1,5 +1,5 @@
 import React__default, { createElement, cloneElement, Fragment, useEffect as useEffect$1, useState as useState$1 } from 'react';
-import _, { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
+import { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
 import Button$1 from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -99,6 +99,37 @@ var getFieldError = function (fieldName, formikProps) {
         return '';
     return fieldError;
 };
+var processFilesWithCallback = function (files, callback, readAs, encoding) {
+    var imgFiles = [];
+    var remFiles = [];
+    Array.from(files).forEach(function (file) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var fileInfo = {
+                name: file.name,
+                type: file.type,
+                size: Math.round(file.size / 1024) + ' kB',
+                base64: file.type.includes('image') ? reader.result : null,
+                file: file,
+            };
+            if (file.type.includes('image')) {
+                imgFiles.push(fileInfo);
+            }
+            else {
+                remFiles.push(file);
+            }
+            if (imgFiles.length + remFiles.length === files.length) {
+                callback({ imgs: imgFiles, rem: remFiles });
+            }
+        };
+        reader[readAs || 'readAsDataURL'](file, encoding);
+        // This works but remember only readAsText can take encoding as a parameter. Might want to mention this in the documentation.
+        console.log(imgFiles, remFiles);
+    });
+};
+var setValue = function (value, formikProps, fieldProps) {
+    formikProps.setFieldValue(get(fieldProps, 'name'), value);
+};
 
 var MUIReadOnly = function (props) {
     return (createElement("div", null,
@@ -110,7 +141,7 @@ var MUITextField = function (props) {
     var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
     var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || '', onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: get(formikProps, "values." + fieldProps.name) || '' });
-    console.log('Text field props read only', isReadOnly);
+    // console.log('Text field props read only', isReadOnly);
     if (isReadOnly) {
         return (createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
@@ -158,7 +189,7 @@ var MUISwitch = function (props) {
     var handleOnChange = function () {
         formikProps.setFieldValue(fieldProps.name, !value);
     };
-    console.log('Switch props', __assign({}, __assign(__assign({}, switchProps), { disabled: (switchProps.disabled || isReadOnly) })));
+    // console.log('Switch props', { ...{ ...switchProps, disabled: (switchProps.disabled || isReadOnly) } });
     return (createElement(FormControlLabel, { control: createElement(Switch, __assign({ checked: !!value, onChange: handleOnChange, onBlur: formikProps.handleBlur, inputProps: { 'aria-label': 'secondary checkbox' }, value: value }, __assign(__assign({}, switchProps), { disabled: (switchProps.disabled || isReadOnly) }))), label: label || '' }));
 };
 
@@ -223,52 +254,23 @@ var useStyles = makeStyles(function () {
 
 var MUIFileInput = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
-    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onChange = fieldProps.onChange, wrapWith = fieldProps.wrapWith;
-    var setValue = function (files) {
-        if (typeof formikProps.setFieldValue === "function") {
-            formikProps.setFieldValue(_.get(fieldProps, 'name'), files);
-        }
-    };
+    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _c = fieldProps.encoding, encoding = _c === void 0 ? 'utf-8' : _c;
     var classes = useStyles$1();
-    var handleChange = function (e) {
-        // e.persist()
-        // onChange?.(e)
-        var files = e.target.files || new FileList();
-        if (onChange) {
-            onChange(files);
-            setValue(files);
+    var handleChange = function (event) {
+        var files = event.target.files || new FileList();
+        if (onFilesChange) {
+            onFilesChange(files);
+            setValue(files, formikProps, fieldProps);
         }
-        var allFiles = [];
-        var remFiles = [];
-        Array.from(files).forEach(function (file) {
-            if (file.type.includes('image')) {
-                var reader_1 = new FileReader();
-                reader_1.onload = function () {
-                    var fileInfo = {
-                        name: file.name,
-                        type: file.type,
-                        size: Math.round(file.size / 1000) + ' kB',
-                        base64: file.type.includes('image') ? reader_1.result : null,
-                        file: file,
-                    };
-                    allFiles.push(fileInfo);
-                    if ((allFiles.length + remFiles.length) === files.length) {
-                        onDone === null || onDone === void 0 ? void 0 : onDone(allFiles, remFiles);
-                        setValue(allFiles.concat(remFiles));
-                    }
-                };
-                reader_1[readAs || 'readAsDataURL'](file);
-            }
-            else {
-                remFiles.push(file);
-                if ((allFiles.length + remFiles.length) === files.length) {
-                    onDone === null || onDone === void 0 ? void 0 : onDone(allFiles, remFiles);
-                    setValue(allFiles.concat(remFiles));
-                }
-            }
-        });
+        processFilesWithCallback(files, function (prop) {
+            var imgs = prop.imgs, rem = prop.rem;
+            onDone === null || onDone === void 0 ? void 0 : onDone(imgs, rem);
+            var files = [].concat(imgs || []).concat(rem || []);
+            setValue(files, formikProps, fieldProps);
+        }, readAs, encoding);
     };
-    return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(React__default.createElement("input", { type: "file", disabled: disabled, multiple: multiple, className: classes.invisibleInput, title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange })) : React__default.createElement("input", { type: "file", disabled: disabled, multiple: multiple, className: invisible ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange })));
+    var input = React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: invisible || wrapWith ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps));
+    return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input));
 };
 var useStyles$1 = makeStyles$1(function () { return createStyles$1({
     invisibleInput: { opacity: 0, width: '100%', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, cursor: 'pointer' }
@@ -461,5 +463,5 @@ var ReactForm = function (props) {
 var index = './lib/ReactForm';
 
 export default index;
-export { BuildFormRow, MLFormAction, MLFormBuilder, MLFormContent, MUICheckBox, MUIFieldArray, MUIFileInput, MUIRadio, MUIReadOnly, MUISelectField, MUISwitch, MUITextField, ReactForm, attachField, getComponentConfig, setDefaultProps };
+export { BuildFormRow, MLFormAction, MLFormBuilder, MLFormContent, MUICheckBox, MUIFieldArray, MUIFileInput, MUIRadio, MUIReadOnly, MUISelectField, MUISwitch, MUITextField, ReactForm, attachField, getComponentConfig, getFieldError, getMenuOptions, processFilesWithCallback, setDefaultProps, setValue };
 //# sourceMappingURL=index.es.js.map

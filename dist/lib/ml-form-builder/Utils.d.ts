@@ -5,6 +5,7 @@ export declare type MenuOptionObject = {
     value: string;
 };
 export declare type MenuOptions = Array<string> | Array<MenuOptionObject>;
+export declare type ReadAsType = keyof Pick<FileReader, 'readAsBinaryString' | 'readAsDataURL' | 'readAsArrayBuffer' | 'readAsText'>;
 export declare const getMenuOptions: (options: MenuOptions) => (number | MenuOptionObject | ((...items: string[]) => number) | ((...items: MenuOptionObject[]) => number) | {
     (...items: ConcatArray<string>[]): string[];
     (...items: (string | ConcatArray<string>)[]): string[];
@@ -21,3 +22,5 @@ export declare const getMenuOptions: (options: MenuOptions) => (number | MenuOpt
     <U_1>(callbackfn: (previousValue: U_1, currentValue: MenuOptionObject, currentIndex: number, array: MenuOptionObject[]) => U_1, initialValue: U_1): U_1;
 } | ((value: string, start?: number | undefined, end?: number | undefined) => string[]) | ((value: MenuOptionObject, start?: number | undefined, end?: number | undefined) => MenuOptionObject[]) | ((target: number, start: number, end?: number | undefined) => string[]) | ((target: number, start: number, end?: number | undefined) => MenuOptionObject[]) | ((searchElement: string, fromIndex?: number | undefined) => boolean) | ((searchElement: MenuOptionObject, fromIndex?: number | undefined) => boolean))[];
 export declare const getFieldError: (fieldName: string, formikProps: FormikValues) => any;
+export declare const processFilesWithCallback: (files: FileList | File[], callback: Function, readAs?: "readAsBinaryString" | "readAsDataURL" | "readAsArrayBuffer" | "readAsText" | undefined, encoding?: string | undefined) => void;
+export declare const setValue: (value: any, formikProps: FormikValues, fieldProps: any) => void;

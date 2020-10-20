@@ -5,9 +5,9 @@ import { MenuOptionObject } from '../Utils';
 export declare type MenuOptionObj = MenuOptionObject & {
     controlProps?: FormControlLabelProps;
 };
-export declare type MenuOptions = Array<string> | Array<MenuOptionObj>;
+export declare type RadioMenuOptions = Array<string> | Array<MenuOptionObj>;
 export interface IMUIRadioProps {
-    options?: MenuOptions;
+    options?: RadioMenuOptions;
     header?: string;
     name?: string;
     id?: string;

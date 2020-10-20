@@ -2,24 +2,24 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
 import _ from 'lodash';
 import { FormikValues } from 'formik';
-import { IFieldProps } from '../../ReactForm';
-
+import { IFieldProps } from '..';
+import { setValue, ReadAsType, processFilesWithCallback } from '../Utils';
 
 
 export interface IMUIFileInputProps {
-	name?: string
-	readAs?: keyof Pick<FileReader, 'readAsBinaryString' | 'readAsDataURL'>
+	readAs?: ReadAsType
+	encoding?: string
 	disabled?: boolean
 	multiple?: boolean
 	accept?: string
 	disableDefaultTooltip?: boolean
 	invisible?: boolean
-	onChange?: (files: FileList) => void
-	onDone?: (files: TFile[], remFiles?: TFile[]) => void
-	/* File for when multiple is false and File[] for when multiple is true */
+	onFilesChange?: (files: FileList) => void
+	onDone?: (imgFiles: TFile[], remFiles?: File[]) => void
 	wrapWith?: (input: JSX.Element) => JSX.Element
 	/* Function passed to wrapWith should take the input Element and return the same within the wrapped element.
-	The input element is always invisible if wrapWith is provided*/
+	The input element is always invisible if wrapWith is provided */
+	nativeInputProps?: React.InputHTMLAttributes<{}>
 }
 
 export interface IFileInputProps extends IFieldProps {
@@ -34,7 +34,7 @@ export interface TFile {
 	file: File
 }
 
-export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
+export const MUIFileInput: React.FC<IFileInputProps> = (props: IFileInputProps) => {
 	const { formikProps = {} as FormikValues, fieldProps = {} as IMUIFileInputProps } = props;
 	const {
 		onDone,
@@ -44,67 +44,40 @@ export const MUIFileInput: React.FC<IFileInputProps> = (props) => {
 		accept,
 		readAs,
 		disabled,
-		onChange,
+		onFilesChange,
 		wrapWith,
+		nativeInputProps,
+		encoding = 'utf-8'
 	} = fieldProps
-	const setValue = (files: any) => {
-		if (typeof formikProps.setFieldValue === "function") {
-			formikProps.setFieldValue(_.get(fieldProps, 'name'), files)
-		}
-	}
+
 	const classes = useStyles();
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// e.persist()
-		// onChange?.(e)
-		let files = e.target.files || new FileList()
-		if (onChange) {
-			onChange(files);
-			setValue(files)
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		let files = event.target.files || new FileList()
+		if (onFilesChange) {
+			onFilesChange(files);
+			setValue(files, formikProps, fieldProps)
 		}
-		let allFiles: Array<TFile> = [];
-		let remFiles: any[] = [];
-		Array.from(files).forEach(file => {
-			if (file.type.includes('image')) {
-				let reader = new FileReader();
-				reader.onload = () => {
-					let fileInfo: TFile = {
-						name: file.name,
-						type: file.type,
-						size: Math.round(file.size / 1000) + ' kB',
-						base64: file.type.includes('image') ? reader.result : null,
-						file: file,
-					};
-					allFiles.push(fileInfo);
-					if ((allFiles.length + remFiles.length) === files.length) {
-						onDone?.(allFiles, remFiles);
-						setValue(allFiles.concat(remFiles))
-					}
-				}
-				reader[readAs || 'readAsDataURL'](file);
-			} else {
-				remFiles.push(file);
-				if ((allFiles.length + remFiles.length) === files.length) {
-					onDone?.(allFiles, remFiles);
-					setValue(allFiles.concat(remFiles))
-				}
-			}
-		});
+		processFilesWithCallback(files, (prop: { imgs: TFile[], rem: any[] }) => {
+			const { imgs, rem } = prop
+			onDone?.(imgs, rem)
+			const files = ([] as TFile[]).concat(imgs || []).concat(rem || [])
+			setValue(files, formikProps, fieldProps)
+		}, readAs, encoding)
+
 	}
+
+	const input = <input type="file" disabled={disabled}
+		multiple={multiple}
+		className={invisible || wrapWith ? classes.invisibleInput : ""}
+		title={disableDefaultTooltip ? " " : undefined}
+		accept={accept}
+		onChange={handleChange}
+		{...nativeInputProps}
+	/>
 	return (<>
 		{
-			wrapWith ? wrapWith(<input type="file" disabled={disabled}
-				multiple={multiple}
-				className={classes.invisibleInput}
-				title={disableDefaultTooltip ? " " : undefined}
-				accept={accept}
-				onChange={handleChange}
-			/>) : <input type="file" disabled={disabled}
-				multiple={multiple}
-				className={invisible ? classes.invisibleInput : ""}
-				title={disableDefaultTooltip ? " " : undefined}
-				accept={accept}
-				onChange={handleChange}
-				/>
+			wrapWith ? wrapWith(input) : input
 		}</>
 
 	)
