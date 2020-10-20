@@ -5,7 +5,7 @@ import CircularProgress, { CircularProgressProps } from '@material-ui/core/Circu
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { FormikValues } from 'formik';
-import { MUITextField, MUISelectField, MUICheckBox, MUISwitch, MUIRadio , MUIFieldArray, MUIFileInput } from './lib';
+import { MUITextField, MUISelectField, MUICheckBox, MUISwitch, MUIRadio, MUIFieldArray, MUIFileInput } from './lib';
 import { getConditionalProps, TFieldConditions } from './lib/ConditionalOperation';
 
 
@@ -131,6 +131,7 @@ export const BuildFormRow: React.FC<FormRowProps> = props => {
                                 marginRight: horizontalSpacing,
                                 paddingLeft: rowSettings.columnHorizontalPadding,
                                 paddingRight: rowSettings.columnHorizontalPadding,
+                                maxWidth: '100%',
                                 ...item.styles
 
                             }
