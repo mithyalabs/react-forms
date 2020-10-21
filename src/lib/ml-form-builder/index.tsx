@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { map, isArray, uniqueId, get, isFunction } from 'lodash';
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { FormikValues } from 'formik';
-import { MUITextField, MUISelectField, MUICheckBox, MUISwitch, MUIRadio, MUIFieldArray, MUIFileInput } from './lib';
+import { FormikProps } from 'formik';
+import { get, isArray, isFunction, map, uniqueId } from 'lodash';
+import * as React from 'react';
+import { MUICheckBox, MUIFieldArray, MUIFileInput, MUIRadio, MUISelectField, MUISwitch, MUITextField } from './lib';
 import { getConditionalProps, TFieldConditions } from './lib/ConditionalOperation';
 
 
@@ -37,10 +37,10 @@ export interface BuilderSettingsProps extends RowSettingsProps {
 }
 
 export type RowSchema = Array<FormConfig> | FormConfig | { columns: Array<FormConfig>, settings?: RowSettingsProps };
-export interface FormRowProps {
+export interface FormRowProps<T = any> {
     schema: RowSchema
     rowId: string
-    formikProps?: FormikValues,
+    formikProps?: FormikProps<T>,
     settings?: BuilderSettingsProps
 }
 
@@ -56,17 +56,17 @@ export interface IFormActionProps {
     displayActions?: boolean
     loaderProps?: CircularProgressProps
 }
-export interface BuilderProps {
+export interface BuilderProps<T = any> {
     schema: Array<RowSchema>
     formId: string
-    formikProps?: FormikValues,
+    formikProps?: FormikProps<T>,
     actionConfig?: IFormActionProps
     settings?: BuilderSettingsProps
     isInProgress?: boolean
 }
 
-export interface IFieldProps {
-    formikProps?: FormikValues,
+export interface IFieldProps<T = any> {
+    formikProps?: FormikProps<T>,
     fieldConfig?: FormConfig
     isReadOnly?: boolean
 }
@@ -103,7 +103,7 @@ attachField('file', <MUIFileInput />)
 
 
 export const BuildFormRow: React.FC<FormRowProps> = props => {
-    const { schema, rowId, formikProps = {}, settings = { horizontalSpacing: 10, verticalSpacing: 10, columnHorizontalPadding: 0, isReadOnly: false } } = props;
+    const { schema, rowId, formikProps = {} as FormikProps<any>, settings = { horizontalSpacing: 10, verticalSpacing: 10, columnHorizontalPadding: 0, isReadOnly: false } } = props;
     let columnItems = get(schema, 'columns') as Array<FormConfig>;
     let rowSettings = { ...settings, ...get(schema, 'settings') } as RowSettingsProps;
     const colItems = (isArray(schema) ? schema : ((isArray(columnItems) ? columnItems : [schema])));
@@ -178,7 +178,7 @@ export const MLFormContent: React.FC<BuilderProps> = props => {
 }
 
 export const MLFormAction: React.FC<IFormActionProps & Pick<BuilderProps, 'formId' | 'formikProps'>> = (props) => {
-    const { formId, formikProps = {} as FormikValues, containerClassNames, submitButtonLayout = 'center', submitButtonText = "Submit", submitButtonProps, loaderProps } = props;
+    const { formId, formikProps = {} as FormikProps<any>, containerClassNames, submitButtonLayout = 'center', submitButtonText = "Submit", submitButtonProps, loaderProps } = props;
     const classes = useFormStyles();
     if (props.actionContent)
         return (React.cloneElement(props.actionContent || <div />, { formikProps }));
@@ -203,7 +203,7 @@ export const MLFormAction: React.FC<IFormActionProps & Pick<BuilderProps, 'formI
 }
 
 export const MLFormBuilder: React.FC<BuilderProps> = props => {
-    const { formikProps = {} as FormikValues, isInProgress = false, actionConfig = {} as IFormActionProps } = props;
+    const { formikProps = {} as FormikProps<any>, isInProgress = false, actionConfig = {} as IFormActionProps } = props;
     useEffect(() => {
         if (isInProgress === false)
             formikProps.setSubmitting(false);

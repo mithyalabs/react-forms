@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { ButtonProps } from '@material-ui/core/Button';
 import { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { FormikValues } from 'formik';
+import { FormikProps } from 'formik';
+import * as React from 'react';
 import { TFieldConditions } from './lib/ConditionalOperation';
 export interface ReadOnlyProps {
     renderer: (props: IFieldProps) => React.ReactNode;
@@ -30,10 +30,10 @@ export declare type RowSchema = Array<FormConfig> | FormConfig | {
     columns: Array<FormConfig>;
     settings?: RowSettingsProps;
 };
-export interface FormRowProps {
+export interface FormRowProps<T = any> {
     schema: RowSchema;
     rowId: string;
-    formikProps?: FormikValues;
+    formikProps?: FormikProps<T>;
     settings?: BuilderSettingsProps;
 }
 declare type submitButtonLayout = "right" | "center" | "fullWidth";
@@ -46,16 +46,16 @@ export interface IFormActionProps {
     displayActions?: boolean;
     loaderProps?: CircularProgressProps;
 }
-export interface BuilderProps {
+export interface BuilderProps<T = any> {
     schema: Array<RowSchema>;
     formId: string;
-    formikProps?: FormikValues;
+    formikProps?: FormikProps<T>;
     actionConfig?: IFormActionProps;
     settings?: BuilderSettingsProps;
     isInProgress?: boolean;
 }
-export interface IFieldProps {
-    formikProps?: FormikValues;
+export interface IFieldProps<T = any> {
+    formikProps?: FormikProps<T>;
     fieldConfig?: FormConfig;
     isReadOnly?: boolean;
 }

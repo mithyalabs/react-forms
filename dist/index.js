@@ -6,10 +6,10 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var lodash = require('lodash');
 var Button = _interopDefault(require('@material-ui/core/Button'));
 var CircularProgress = _interopDefault(require('@material-ui/core/CircularProgress'));
 var styles = require('@material-ui/core/styles');
+var lodash = require('lodash');
 var TextField = _interopDefault(require('@material-ui/core/TextField'));
 var Typography = _interopDefault(require('@material-ui/core/Typography'));
 var core = require('@material-ui/core');
