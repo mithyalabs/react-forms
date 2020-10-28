@@ -1,5 +1,4 @@
-- [ml-react-forms](#ml-react-forms)
-	- [react-form](#react-form)
+- [react-form](#react-form)
 	- [Installation](#installation)
 	- [Getting started with react-forms](#getting-started-with-react-forms)
 	- [Built In Components](#built-in-components)
@@ -12,21 +11,16 @@
 	- [Initial Values](#initial-values)
 	- [Managing Form action](#managing-form-action)
 
-# ml-react-forms
-Create configurable forms
+# react-form
 
-## react-form
 Hi! This is a react library that builds a form component for you.
 It uses basic [material-ui](https://www.npmjs.com/package/@material-ui/core) library for designing and [formik](https://www.npmjs.com/package/formik) library for form action handling. 
-
 
 ## Installation
 
     npm i react-forms
 
-
 ## Getting started with react-forms
-
 
     import {ReactForm} from 'react-forms'
     import React from 'react'
@@ -68,9 +62,7 @@ Each item represents a row , so if the item contains single object then there wi
 *fieldProps*: Accept all the default props available in their respective material-ui Api
 *styles*: CSS style object to be applied on the wrapper. Each component is wrapped around with a div component.
 
-
 *You don't need to pass any onChange since it all will be handled by the form builder using formik library*
-
 
 ## Sampe Object Structures 
 
@@ -83,9 +75,13 @@ Each item represents a row , so if the item contains single object then there wi
         styles : { margin : '0 auto'}
         }
 	textFieldProps = [TextFieldProps](https://material-ui.com/api/text-field/)
+
    
+
   2. **SelectField** :
+
 	
+
     {
     	type : 'select'
     	valueKey: 'mySelect'
@@ -113,8 +109,11 @@ selectProps = [SelectProps](https://material-ui.com/api/select/)
 		    }
 	    }
     ***Options** can be an Array of string or Array of {name , value} object. This structure is followed by SelectField , Checkbox and Radiobutton.*
+
  **Except options all other props are optional and**
+
     formControlLabelProps : [formcontrollabelprops](https://material-ui.com/api/form-control-label/#formcontrollabel-api),
+
    formcontrolProps : [formcontrolprops](https://material-ui.com/api/form-control/#formcontrol-api)
    formHelperTextProps : [formhelpertextprops](https://material-ui.com/api/form-helper-text/#formhelpertext-api)
   checkboxProps : [CheckboxProps](https://material-ui.com/api/checkbox/)
@@ -146,6 +145,7 @@ selectProps = [SelectProps](https://material-ui.com/api/select/)
 	switchProps = [SwitchProps](https://material-ui.com/api/switch/)
 
 6. **Password**
+
 	
 
 	    {
@@ -158,7 +158,10 @@ selectProps = [SelectProps](https://material-ui.com/api/select/)
 	    }
 
 7. **File :**
-	```
+
+$mdFormatter$11$mdFormatter$
+
+``` 
 	{
 		type: 'file',
 		valueKey: 'myfile',
@@ -177,24 +180,26 @@ selectProps = [SelectProps](https://material-ui.com/api/select/)
 		}
 	}
 	```
+
 	**Notes :**
-	- Do not specify encoding if readAs is not set to readAsText. It will throw an error since only text can have encoding  property in JS' FileReader.
-	- Any props specified in nativeInputProps will override other defaults and properties set in the component. 
-	- Function passed to wrapWith should take the input Element and return the same within the wrapped element. The input element is always invisible if wrapWith is provided
-	- Specify the type of files you want to accept using accept.
+
+  + Do not specify encoding if readAs is not set to readAsText. It will throw an error since only text can have encoding  property in JS' FileReader.
+  + Any props specified in nativeInputProps will override other defaults and properties set in the component. 
+  + Function passed to wrapWith should take the input Element and return the same within the wrapped element. The input element is always invisible if wrapWith is provided
+  + Specify the type of files you want to accept using accept.
 
   
 
 ## Setting default props
+
 You can set your own default props for a specific field that would be used all over the application. All you need to do is use the setDefaultProps() method and pass the field type and your default props object.
 **Example :**
 
     import {setDefaultProps} from 'react-forms'
 	setDefaultProps('text' , {fullWidth : true , color : 'secondary'})
+
 Now this props would be default properties followed throughout the application.
 And of course if you don't want to use them somewhere then you can pass your own fieldProps in config file.
-
-
 
 ## Add your own Component
 
@@ -208,6 +213,7 @@ If you want to create your own custom component then we have provided a attachFi
 	attachField('your-component',<YourComponent/> ,{default-props})
 
 ## Adding Condition to your form field.
+
 Just imagine if you want to make a component behave differently based on the state of another component. Well it is possible by passing condition props to the config file. 
 *Check this example on sandbox*
 
@@ -240,7 +246,9 @@ Just imagine if you want to make a component behave differently based on the sta
 				]
 			}
 		}]
+
  ***Note:***
+
 	 
 
  - hidden : if True the component  will be rendered if and only if the given conditions are true.
@@ -248,15 +256,17 @@ Just imagine if you want to make a component behave differently based on the sta
  - defaultProps : this props will be passed with fieldprops if the necessary conditions are not satisfied.
  - truthyProps : this props will be passed with fieldProps if the conditions are satisfied.
  - values : every object in the array contains a 
+
 		 - key : which uniquely identifies the field in the form.
 		 - compareValue : the value to be compared with the value of the field identified by the key.
 		 - operator : comparition operator.
 
-
 ## Validating Form Fields 
+
 No form is complete without some some constraints or validation.
 We use [YUP](https://www.npmjs.com/package/yup) library for all kind of field validations.
 example : 
+
 	
 
     import * as YUP from 'yup'
@@ -290,10 +300,14 @@ example :
 					onSubmit={(values:object)=>{console.log(values)} />
 			</div>
 		}
+
 Once you hit the submit button it will perform validation as per the validation schema.
+
 ## Initial Values 
+
 You can provide initial values if you want to the field of your choice.
 All you need to do is pass an array that looks something like this:
+
 	[ {valueKey : value} , {valueKey : value} .....]
 
     initVals = [ {myText : 'Init Value' , myCheckBox : ['option_2'] }
@@ -312,6 +326,7 @@ Well the last thing which the ReactForm takes is an actionConfig object.
 	    actionContent : Custom JSX Component
     }
     
+
   [submitbuttonprops](https://material-ui.com/api/button/)
 [loaderprops](https://material-ui.com/api/circular-progress/#circularprogress-api)
 
@@ -321,5 +336,3 @@ Dependencies
 2. lodash
 3. @material-ui/core
 4. @material-ui/icons
-
-
