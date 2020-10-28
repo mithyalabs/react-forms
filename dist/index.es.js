@@ -1,8 +1,8 @@
-import React__default, { createElement, useState as useState$1, cloneElement, Fragment as Fragment$1, useEffect as useEffect$1 } from 'react';
-import { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
+import React__default, { createElement, cloneElement, Fragment, useEffect as useEffect$1, useState as useState$1 } from 'react';
 import Button$1 from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles as makeStyles$1, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText, FormLabel, FormGroup, FormControlLabel, Checkbox, Switch, RadioGroup, Radio, IconButton, Button, makeStyles as makeStyles$2, createStyles as createStyles$1, Box, TextField as TextField$1, Typography as Typography$1 } from '@material-ui/core';
@@ -169,7 +169,7 @@ var MUISelectField = function (props) {
 
 var MUICheckBox = function (props) {
     var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
-    var label = fieldProps.label, helperText = fieldProps.helperText, _d = fieldProps.options, options = _d === void 0 ? [] : _d, header = fieldProps.header, headerProps = fieldProps.headerProps, checkGroupProps = fieldProps.checkGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, formControlLabelProps = fieldProps.formControlLabelProps, checkboxProps = __rest(fieldProps, ["label", "helperText", "options", "header", "headerProps", "checkGroupProps", "formControlProps", "formHelperTextProps", "formControlLabelProps"]);
+    var _d = fieldProps.label, label = _d === void 0 ? '' : _d, helperText = fieldProps.helperText, _e = fieldProps.options, options = _e === void 0 ? [] : _e, header = fieldProps.header, headerProps = fieldProps.headerProps, checkGroupProps = fieldProps.checkGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, formControlLabelProps = fieldProps.formControlLabelProps, _f = fieldProps.isLabelHtmlString, isLabelHtmlString = _f === void 0 ? false : _f, checkboxProps = __rest(fieldProps, ["label", "helperText", "options", "header", "headerProps", "checkGroupProps", "formControlProps", "formHelperTextProps", "formControlLabelProps", "isLabelHtmlString"]);
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
     var value = get(formikProps, "values." + fieldProps.name);
     var menuOptions = getMenuOptions(options);
@@ -177,7 +177,7 @@ var MUICheckBox = function (props) {
         (header) &&
             (createElement(FormLabel, __assign({}, headerProps), header)),
         createElement(FormGroup, __assign({}, checkGroupProps), (!isEmpty(menuOptions)) ?
-            (map(menuOptions, function (item, index) { return (createElement(FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, control: createElement(Checkbox, __assign({ checked: (indexOf(value, item.value) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))), label: item.name || '' }, formControlLabelProps))); })) : (createElement(FormControlLabel, __assign({ control: createElement(Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: label || '' }, formControlLabelProps)))),
+            (map(menuOptions, function (item, index) { return (createElement(FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, control: createElement(Checkbox, __assign({ checked: (indexOf(value, item.value) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))), label: item.name || '' }, formControlLabelProps))); })) : (createElement(FormControlLabel, __assign({ control: createElement(Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: isLabelHtmlString ? createElement("div", { dangerouslySetInnerHTML: { __html: label } }) : label }, formControlLabelProps)))),
         (fieldError || helperText) &&
             (createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText))));
 };
@@ -5856,7 +5856,7 @@ var BuildFormRow = function (props) {
         var Component = componentConfig.component;
         if (conditionalProps.hidden === true)
             return createElement("div", { key: rowId + "_field_" + index });
-        return (createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: (item.flex || 1), marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding }, item.styles) }, (settings.isReadOnly && item.readOnlyProps && isFunction(item.readOnlyProps.renderer)) ?
+        return (createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: (item.flex || 1), marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding, maxWidth: '100%' }, item.styles) }, (settings.isReadOnly && item.readOnlyProps && isFunction(item.readOnlyProps.renderer)) ?
             (item.readOnlyProps.renderer({ formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })) :
             cloneElement(Component, { fieldProps: fieldProps, formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })));
     })));
