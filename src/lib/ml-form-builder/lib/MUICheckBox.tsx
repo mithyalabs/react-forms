@@ -50,6 +50,7 @@ export const MUICheckBox: React.FC<ICheckboxProps> = (props) => {
                             <FormControlLabel
                                 control={<Checkbox checked={(value || false)} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange}  {...checkboxProps} />}
                                 label={label || ''}
+                                
                                 {...formControlLabelProps}
                             />
                         )
