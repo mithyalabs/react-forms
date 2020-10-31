@@ -88,7 +88,7 @@ export const setDefaultProps = (type: Array<string> | string, props: object) => 
     if (isArray(type)) {
         map(type, item => ComponentMapConfig[item].props = { ...ComponentMapConfig[item].props, ...props })
     } else
-        ComponentMapConfig[type].props = { ...ComponentMapConfig[type].props, ...props }
+        ComponentMapConfig[type]?.props = { ...ComponentMapConfig[type]?.props, ...props }
 }
 
 
