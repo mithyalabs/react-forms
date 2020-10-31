@@ -5733,7 +5733,7 @@ var MUIPhoneField = function (props) {
                 React__default.createElement(FormControl, __assign({ fullWidth: true }, countryCodeFormControlProps),
                     React__default.createElement(InputLabel, { id: fieldProps.name }, countryCodeLabel || 'Country code'),
                     React__default.createElement(Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps), COUNTRY_LIST.map(function (country) {
-                        return React__default.createElement(MenuItem, { value: country.dial_code }, " " + country.dial_code + " (" + country.name + ")");
+                        return React__default.createElement(MenuItem, { key: country.dial_code, value: country.dial_code }, " " + country.dial_code + " (" + country.name + ")");
                     })))),
             React__default.createElement(Box, { width: '85%', marginLeft: '5px' },
                 React__default.createElement(TextField$1, __assign({ fullWidth: true, label: phoneLabel || 'Phone', InputProps: {

@@ -57,7 +57,7 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
 						>
 							{
 								COUNTRY_LIST.map((country: Record<string, string>) => {
-									return <MenuItem value={country.dial_code}>{` ${country.dial_code} (${country.name})`}</MenuItem>
+									return <MenuItem key={country.dial_code} value={country.dial_code}>{` ${country.dial_code} (${country.name})`}</MenuItem>
 								})
 							}
 						</Select>
