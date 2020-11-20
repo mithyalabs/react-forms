@@ -5709,14 +5709,14 @@ var COUNTRY_LIST = [
 
 var MUIPhoneField = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b, fieldConfig = props.fieldConfig;
-    var _c = useState$1(''), code = _c[0], setCode = _c[1];
-    var error = getFieldError(fieldProps.name || '', formikProps);
+    var _c = useState$1(""), code = _c[0], setCode = _c[1];
+    var error = getFieldError(fieldProps.name || "", formikProps);
     var classes = useStyles$2();
-    var value = get(formikProps, "values." + fieldProps.name) || '';
+    var value = get(formikProps, "values." + fieldProps.name) || "";
     var countryCodeProps = fieldProps.countryCodeProps, phoneNumberProps = fieldProps.phoneNumberProps, countryCodeLabel = fieldProps.countryCodeLabel, phoneLabel = fieldProps.phoneLabel, countryCodeFormControlProps = fieldProps.countryCodeFormControlProps;
     var onChange = function (event) {
         event.preventDefault();
-        var number = event.target.value.replace('-', '');
+        var number = event.target.value.replace("-", "");
         formikProps.setFieldValue("" + fieldProps.name, code + "-" + number);
     };
     var codeChange = function (e) {
@@ -5728,29 +5728,31 @@ var MUIPhoneField = function (props) {
     };
     var newError = formikProps.errors["" + fieldProps.name];
     return (React__default.createElement(React__default.Fragment, null,
-        React__default.createElement(Box, { width: '100%', display: 'flex', alignItems: 'flex-end' },
-            React__default.createElement(Box, { width: '15%' },
+        React__default.createElement(Box, { width: "100%", display: "flex", alignItems: "flex-end" },
+            React__default.createElement(Box, { width: "30%" },
                 React__default.createElement(FormControl, __assign({ fullWidth: true }, countryCodeFormControlProps),
-                    React__default.createElement(InputLabel, { id: fieldProps.name }, countryCodeLabel || 'Country code'),
-                    React__default.createElement(Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps), COUNTRY_LIST.map(function (country) {
-                        return React__default.createElement(MenuItem, { key: country.dial_code, value: country.dial_code }, " " + country.dial_code + " (" + country.name + ")");
+                    React__default.createElement(InputLabel, { id: fieldProps.name }, countryCodeLabel || "Country code"),
+                    React__default.createElement(Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps, { native: true }), COUNTRY_LIST.map(function (country) {
+                        if (!country.dial_code)
+                            return null;
+                        return (React__default.createElement("option", { key: country.dial_code, value: country.dial_code }, country.name + " (" + country.dial_code + ")"));
                     })))),
-            React__default.createElement(Box, { width: '85%', marginLeft: '5px' },
-                React__default.createElement(TextField$1, __assign({ fullWidth: true, label: phoneLabel || 'Phone', InputProps: {
-                        name: fieldConfig === null || fieldConfig === void 0 ? void 0 : fieldConfig.valueKey
-                    }, onBlur: handleBlur, autoComplete: 'nope', type: 'tel', value: value.split('-')[1] || '', error: error ? true : false, onChange: onChange }, phoneNumberProps)))),
-        newError && React__default.createElement(Typography$1, { variant: 'overline', className: newError ? classes.errorField : '' }, newError)));
+            React__default.createElement(Box, { width: "70%", marginLeft: "5px" },
+                React__default.createElement(TextField$1, __assign({ fullWidth: true, label: phoneLabel || "Phone", InputProps: {
+                        name: fieldConfig === null || fieldConfig === void 0 ? void 0 : fieldConfig.valueKey,
+                    }, onBlur: handleBlur, autoComplete: "nope", type: "tel", value: value.split("-")[1] || "", error: error ? true : false, onChange: onChange }, phoneNumberProps)))),
+        newError && (React__default.createElement(Typography$1, { variant: "overline", className: newError ? classes.errorField : "" }, newError))));
 };
 var useStyles$2 = makeStyles(function () {
-    return (createStyles({
+    return createStyles({
         errorField: {
-            color: '#B71840',
+            color: "#B71840",
             fontSize: 12,
-            fontWeight: 'bold',
-            textTransform: 'none',
-            marginleft: '15%'
+            fontWeight: "bold",
+            textTransform: "none",
+            marginLeft: "30%",
         },
-    }));
+    });
 });
 
 var compare = function (value1, operator, value2) {
@@ -5818,47 +5820,72 @@ var getComponentConfig = function (type) {
 };
 var attachField = function (type, component, props) {
     if (isArray(type)) {
-        map(type, function (item) { return ComponentMapConfig[item] = { component: component, props: props }; });
+        map(type, function (item) { return (ComponentMapConfig[item] = { component: component, props: props }); });
     }
     else
         ComponentMapConfig[type] = { component: component, props: props };
 };
 var setDefaultProps = function (type, props) {
+    var _a;
     if (isArray(type)) {
-        map(type, function (item) { return ComponentMapConfig[item].props = __assign(__assign({}, ComponentMapConfig[item].props), props); });
+        map(type, function (item) {
+            return (ComponentMapConfig[item].props = __assign(__assign({}, ComponentMapConfig[item].props), props));
+        });
     }
-    else
-        ComponentMapConfig[type].props = __assign(__assign({}, ComponentMapConfig[type].props), props);
+    else if (ComponentMapConfig[type])
+        ComponentMapConfig[type].props = __assign(__assign({}, (_a = ComponentMapConfig[type]) === null || _a === void 0 ? void 0 : _a.props), props);
 };
-attachField('text', createElement(MUITextField, null), { type: 'text' });
-attachField('password', createElement(MUITextField, null), { type: 'password' });
-attachField('select', createElement(MUISelectField, null));
-attachField('checkbox', createElement(MUICheckBox, null));
-attachField('switch', createElement(MUISwitch, null));
-attachField('radio', createElement(MUIRadio, null));
-attachField('array', createElement(MUIFieldArray, null));
-attachField('file', createElement(MUIFileInput, null));
-attachField('phone', createElement(MUIPhoneField, null));
+attachField("text", createElement(MUITextField, null), { type: "text" });
+attachField("password", createElement(MUITextField, null), { type: "password" });
+attachField("select", createElement(MUISelectField, null));
+attachField("checkbox", createElement(MUICheckBox, null));
+attachField("switch", createElement(MUISwitch, null));
+attachField("radio", createElement(MUIRadio, null));
+attachField("array", createElement(MUIFieldArray, null));
+attachField("file", createElement(MUIFileInput, null));
+attachField("phone", createElement(MUIPhoneField, null));
 var BuildFormRow = function (props) {
-    var schema = props.schema, rowId = props.rowId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.settings, settings = _b === void 0 ? { horizontalSpacing: 10, verticalSpacing: 10, columnHorizontalPadding: 0, isReadOnly: false } : _b;
-    var columnItems = get(schema, 'columns');
-    var rowSettings = __assign(__assign({}, settings), get(schema, 'settings'));
-    var colItems = (isArray(schema) ? schema : ((isArray(columnItems) ? columnItems : [schema])));
+    var schema = props.schema, rowId = props.rowId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.settings, settings = _b === void 0 ? {
+        horizontalSpacing: 10,
+        verticalSpacing: 10,
+        columnHorizontalPadding: 0,
+        isReadOnly: false,
+    } : _b;
+    var columnItems = get(schema, "columns");
+    var rowSettings = __assign(__assign({}, settings), get(schema, "settings"));
+    var colItems = isArray(schema)
+        ? schema
+        : isArray(columnItems)
+            ? columnItems
+            : [schema];
     var classes = useFormStyles();
-    var rowStyle = { marginBottom: (rowSettings.verticalSpacing || 10) };
+    var rowStyle = { marginBottom: rowSettings.verticalSpacing || 10 };
     return (createElement("div", { className: classes.row, style: rowStyle }, map(colItems, function (item, index) {
         var componentConfig = ComponentMapConfig[item.type];
-        var horizontalSpacing = (index === (colItems.length - 1)) ? 0 : (rowSettings.horizontalSpacing || 10);
+        var horizontalSpacing = index === colItems.length - 1
+            ? 0
+            : rowSettings.horizontalSpacing || 10;
         if (!componentConfig)
             return createElement("div", { key: rowId + "_field_" + index });
         var conditionalProps = getConditionalProps(item, formikProps);
-        var fieldProps = __assign(__assign(__assign({ id: item.id, name: (item.name || item.valueKey) }, componentConfig.props), item.fieldProps), conditionalProps.finalProps);
+        var fieldProps = __assign(__assign(__assign({ id: item.id, name: item.name || item.valueKey }, componentConfig.props), item.fieldProps), conditionalProps.finalProps);
         var Component = componentConfig.component;
         if (conditionalProps.hidden === true)
             return createElement("div", { key: rowId + "_field_" + index });
-        return (createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: (item.flex || 1), marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding, maxWidth: '100%' }, item.styles) }, (settings.isReadOnly && item.readOnlyProps && isFunction(item.readOnlyProps.renderer)) ?
-            (item.readOnlyProps.renderer({ formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })) :
-            cloneElement(Component, { fieldProps: fieldProps, formikProps: formikProps, fieldConfig: item, isReadOnly: settings.isReadOnly })));
+        return (createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: item.flex || 1, marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding, maxWidth: "100%" }, item.styles) }, settings.isReadOnly &&
+            item.readOnlyProps &&
+            isFunction(item.readOnlyProps.renderer)
+            ? item.readOnlyProps.renderer({
+                formikProps: formikProps,
+                fieldConfig: item,
+                isReadOnly: settings.isReadOnly,
+            })
+            : cloneElement(Component, {
+                fieldProps: fieldProps,
+                formikProps: formikProps,
+                fieldConfig: item,
+                isReadOnly: settings.isReadOnly,
+            })));
     })));
 };
 var getUpdateSchema = function (schema, formId) {
@@ -5881,16 +5908,17 @@ var MLFormContent = function (props) {
     })));
 };
 var MLFormAction = function (props) {
-    var formId = props.formId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, containerClassNames = props.containerClassNames, _b = props.submitButtonLayout, submitButtonLayout = _b === void 0 ? 'center' : _b, _c = props.submitButtonText, submitButtonText = _c === void 0 ? "Submit" : _c, submitButtonProps = props.submitButtonProps, loaderProps = props.loaderProps;
+    var formId = props.formId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, containerClassNames = props.containerClassNames, _b = props.submitButtonLayout, submitButtonLayout = _b === void 0 ? "center" : _b, _c = props.submitButtonText, submitButtonText = _c === void 0 ? "Submit" : _c, submitButtonProps = props.submitButtonProps, loaderProps = props.loaderProps;
     var classes = useFormStyles();
     if (props.actionContent)
-        return (cloneElement(props.actionContent || createElement("div", null), { formikProps: formikProps }));
+        return cloneElement(props.actionContent || createElement("div", null), { formikProps: formikProps });
     var layoutClassName = "action-" + submitButtonLayout;
-    return (createElement("div", { className: clsx(classes.actionContainer, layoutClassName, containerClassNames) }, (props.actionContent) ?
-        (cloneElement(props.actionContent || createElement("div", null), { formikProps: formikProps, formId: formId }))
-        : (createElement(Fragment$1, null,
-            createElement(Button$1, __assign({ type: "submit", disabled: formikProps.isSubmitting, variant: "contained", color: "primary" }, submitButtonProps), submitButtonText),
-            (formikProps.isSubmitting) && (createElement(CircularProgress, __assign({ size: 24, color: "secondary", className: classes.submitLoader }, loaderProps)))))));
+    return (createElement("div", { className: clsx(classes.actionContainer, layoutClassName, containerClassNames) }, props.actionContent ? (cloneElement(props.actionContent || createElement("div", null), {
+        formikProps: formikProps,
+        formId: formId,
+    })) : (createElement(Fragment$1, null,
+        createElement(Button$1, __assign({ type: "submit", disabled: formikProps.isSubmitting, variant: "contained", color: "primary" }, submitButtonProps), submitButtonText),
+        formikProps.isSubmitting && (createElement(CircularProgress, __assign({ size: 24, color: "secondary", className: classes.submitLoader }, loaderProps)))))));
 };
 var MLFormBuilder = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.isInProgress, isInProgress = _b === void 0 ? false : _b, _c = props.actionConfig, actionConfig = _c === void 0 ? {} : _c;
@@ -5900,37 +5928,36 @@ var MLFormBuilder = function (props) {
     }, [isInProgress]);
     return (createElement("form", { onSubmit: formikProps.handleSubmit },
         createElement(MLFormContent, __assign({}, props)),
-        (actionConfig.displayActions !== false) &&
-            (createElement(MLFormAction, __assign({ formId: props.formId, formikProps: formikProps }, actionConfig)))));
+        actionConfig.displayActions !== false && (createElement(MLFormAction, __assign({ formId: props.formId, formikProps: formikProps }, actionConfig)))));
 };
 var useFormStyles = makeStyles$1(function () {
-    return (createStyles({
+    return createStyles({
         row: {
-            display: 'flex'
+            display: "flex",
         },
         column: {},
         actionContainer: {
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            '&.action-center': {
-                justifyContent: 'center'
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            "&.action-center": {
+                justifyContent: "center",
             },
-            '&.action-right': {
-                justifyContent: 'flex-end'
+            "&.action-right": {
+                justifyContent: "flex-end",
             },
-            '&.action-fullWidth > button': {
-                flex: 1
-            }
+            "&.action-fullWidth > button": {
+                flex: 1,
+            },
         },
         submitLoader: {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-            marginTop: -5
-        }
-    }));
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            marginTop: -5,
+        },
+    });
 });
 
 var ReactForm = function (props) {

@@ -1,8 +1,8 @@
-import { ButtonProps } from '@material-ui/core/Button';
-import { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { FormikProps } from 'formik';
-import * as React from 'react';
-import { TFieldConditions } from './lib/ConditionalOperation';
+import { ButtonProps } from "@material-ui/core/Button";
+import { CircularProgressProps } from "@material-ui/core/CircularProgress";
+import { FormikProps } from "formik";
+import * as React from "react";
+import { TFieldConditions } from "./lib/ConditionalOperation";
 export interface ReadOnlyProps {
     renderer: (props: IFieldProps) => React.ReactNode;
 }
@@ -67,6 +67,6 @@ export declare const attachField: (type: string | string[], component: JSX.Eleme
 export declare const setDefaultProps: (type: string | string[], props: object) => void;
 export declare const BuildFormRow: React.FC<FormRowProps>;
 export declare const MLFormContent: React.FC<BuilderProps>;
-export declare const MLFormAction: React.FC<IFormActionProps & Pick<BuilderProps, 'formId' | 'formikProps'>>;
+export declare const MLFormAction: React.FC<IFormActionProps & Pick<BuilderProps, "formId" | "formikProps">>;
 export declare const MLFormBuilder: React.FC<BuilderProps>;
 export default MLFormBuilder;

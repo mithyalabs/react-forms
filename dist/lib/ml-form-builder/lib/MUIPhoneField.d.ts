@@ -1,6 +1,6 @@
-import { FormControlProps, SelectProps, TextFieldProps } from '@material-ui/core';
-import { FC } from 'react';
-import { IFieldProps } from '..';
+import { FormControlProps, SelectProps, TextFieldProps } from "@material-ui/core";
+import { FC } from "react";
+import { IFieldProps } from "..";
 export interface IMUIPhoneFieldProps {
     name?: string;
     countryCodeProps?: SelectProps;
