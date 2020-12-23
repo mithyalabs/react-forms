@@ -84,11 +84,11 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
               {...countryCodeProps}
               native
             >
-              {COUNTRY_LIST.map((country) => {
+              {COUNTRY_LIST.map((country,index) => {
                 if (!country.dial_code) return null;
                 return (
                   <option
-                    key={country.dial_code}
+                    key={index}
                     value={country.dial_code}
                   >{`${country.name} (${country.dial_code})`}</option>
                 );
