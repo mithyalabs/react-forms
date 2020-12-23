@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   FormControl,
   FormControlProps,
   InputLabel,
@@ -25,6 +26,8 @@ export interface IMUIPhoneFieldProps {
   countryCodeFormControlProps?: FormControlProps;
   phoneNumberProps?: TextFieldProps;
   phoneLabel?: string;
+  countryCodeContainerProps: BoxProps;
+  phoneContainerProps: BoxProps;
 }
 
 export interface MUIPhoneFieldProps extends IFieldProps {
@@ -47,6 +50,8 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
     countryCodeLabel,
     phoneLabel,
     countryCodeFormControlProps,
+    countryCodeContainerProps,
+    phoneContainerProps,
   } = fieldProps;
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,7 +72,7 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
   return (
     <>
       <Box width="100%" display="flex" alignItems="flex-end">
-        <Box width="30%">
+        <Box width="30%" {...countryCodeContainerProps}>
           <FormControl fullWidth {...countryCodeFormControlProps}>
             <InputLabel id={fieldProps.name}>
               {countryCodeLabel || "Country code"}
@@ -91,7 +96,7 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
             </Select>
           </FormControl>
         </Box>
-        <Box width="70%" marginLeft="5px">
+        <Box width="70%" marginLeft="5px" {...phoneContainerProps}>
           <TextField
             fullWidth
             label={phoneLabel || "Phone"}
