@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { FormControlProps, FormHelperTextProps, SelectProps } from '@material-ui/core';
-import { IFieldProps } from '../index';
-import { MenuOptions } from '../Utils';
+import * as React from "react";
+import { FormControlProps, FormHelperTextProps, SelectProps } from "@material-ui/core";
+import { IFieldProps } from "../index";
+import { MenuOptions } from "../Utils";
 export interface IMUISelectProps extends SelectProps {
     label?: string;
     options?: MenuOptions;

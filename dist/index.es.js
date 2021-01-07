@@ -5,7 +5,7 @@ import { makeStyles as makeStyles$1, createStyles } from '@material-ui/core/styl
 import { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { FormControl, InputLabel, Select, MenuItem, FormHelperText, FormLabel, FormGroup, FormControlLabel, Checkbox, Switch, RadioGroup, Radio, IconButton, Button, makeStyles as makeStyles$2, createStyles as createStyles$1, Box, TextField as TextField$1, Typography as Typography$1 } from '@material-ui/core';
+import { MenuItem, FormControl, InputLabel, Select, FormHelperText, FormLabel, FormGroup, FormControlLabel, Checkbox, Switch, RadioGroup, Radio, IconButton, Button, makeStyles as makeStyles$2, createStyles as createStyles$1, Box, TextField as TextField$1, Typography as Typography$1 } from '@material-ui/core';
 import { FieldArray, Formik } from 'formik';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -152,19 +152,28 @@ var MUISelectField = function (props) {
     var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
     var label = fieldProps.label, _d = fieldProps.options, options = _d === void 0 ? [] : _d, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _e = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _e === void 0 ? {} : _e, _f = fieldProps.menuItemProps, menuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.inputLabelProps, inputLabelProps = _g === void 0 ? {} : _g, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
     var labelId = fieldConfig.id + "_label";
-    var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    var emptyItemText = (isString(emptyItem) ? emptyItem : 'None');
+    var fieldError = getFieldError(fieldProps.name || "", formikProps);
+    var emptyItemText = isString(emptyItem) ? emptyItem : "None";
     var menuOptions = getMenuOptions(options);
-    var value = get(formikProps, "values." + fieldProps.name) || ((selectProps.multiple) ? [] : '');
+    var value = get(formikProps, "values." + fieldProps.name) ||
+        (selectProps.multiple ? [] : "");
+    var optionsList = [];
+    if (selectProps.native) {
+        if (menuOptions)
+            optionsList = map(menuOptions, function (item, index) { return (createElement("option", __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); });
+        if (emptyItem)
+            optionsList.unshift(createElement("option", __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "", selected: true }, emptyMenuItemProps), emptyItemText));
+    }
+    else {
+        if (menuOptions)
+            optionsList = map(menuOptions, function (item, index) { return (createElement(MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); });
+        if (emptyItem)
+            optionsList.unshift(createElement(MenuItem, __assign({ value: "" }, emptyMenuItemProps), emptyItemText));
+    }
     return (createElement(FormControl, __assign({ error: !!fieldError }, formControlProps),
-        label &&
-            (createElement(InputLabel, __assign({ id: labelId }, inputLabelProps), label)),
-        createElement(Select, __assign({ labelId: labelId, id: fieldConfig.id, value: value, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, selectProps),
-            (emptyItem) &&
-                (createElement(MenuItem, __assign({ value: '' }, emptyMenuItemProps), emptyItemText)),
-            map(menuOptions, function (item, index) { return (createElement(MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); })),
-        (fieldError || fieldProps.helperText) &&
-            (createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || fieldProps.helperText))));
+        label && (createElement(InputLabel, __assign({ id: labelId }, inputLabelProps), label)),
+        createElement(Select, __assign({ labelId: labelId, id: fieldConfig.id, value: value, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, selectProps), optionsList),
+        (fieldError || fieldProps.helperText) && (createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || fieldProps.helperText))));
 };
 
 var MUICheckBox = function (props) {
