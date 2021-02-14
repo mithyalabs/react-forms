@@ -1,14 +1,15 @@
-import * as React from 'react';
-import { IFieldProps, FormConfig } from '../index';
-import { Checkbox, FormControl, FormControlProps, FormHelperText, FormHelperTextProps, FormControlLabel, FormControlLabelProps, CheckboxProps, FormLabel, FormLabelProps, FormGroup, FormGroupProps } from '@material-ui/core';
+import { Checkbox, CheckboxProps, FormControl, FormControlLabel, FormControlLabelProps, FormControlProps, FormGroup, FormGroupProps, FormHelperText, FormHelperTextProps, FormLabel, FormLabelProps } from '@material-ui/core';
 import { FormikValues } from 'formik';
-import { get, isEmpty, map, indexOf } from 'lodash';
-import { getFieldError, getMenuOptions, MenuOptions, MenuOptionObject } from '../Utils';
+import { get, indexOf, isEmpty, map } from 'lodash';
+import * as React from 'react';
+import { FormConfig, IFieldProps } from '../index';
+import { getFieldError, getMenuOptions, MenuOptionObject, MenuOptions } from '../Utils';
+
 
 export interface IMUICheckboxProps extends CheckboxProps {
     label?: string,
     helperText?: string,
-    options?: MenuOptions,
+    options?: MenuOptions<FormControlLabelProps>,
     header?: string
     headerProps?: FormLabelProps
     checkGroupProps?: FormGroupProps
@@ -40,14 +41,18 @@ export const MUICheckBox: React.FC<ICheckboxProps> = (props) => {
                 {
                     (!isEmpty(menuOptions)) ?
                         (
-                            map(menuOptions, (item: MenuOptionObject, index) => (
-                                <FormControlLabel
-                                    key={`${fieldConfig.id}_check_${index}`}
-                                    control={<Checkbox checked={(indexOf(value, item.value) > -1)} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={item.value}  {...{ ...checkboxProps, id: `${fieldConfig.id}_check_${index}` }} />}
-                                    label={item.name || ''}
-                                    {...formControlLabelProps}
-                                />
-                            ))
+                            map(menuOptions, (item: MenuOptionObject<FormControlLabelProps>, index) => {
+                                const { value: option, name, control, ...rest } = item;
+                                return (
+                                    <FormControlLabel
+                                        key={`${fieldConfig.id}_check_${index}`}
+                                        label={name || ''}
+                                        {...formControlLabelProps}
+                                        control={control ?? <Checkbox checked={(indexOf(value, option) > -1)} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={item.value}  {...{ ...checkboxProps, id: `${fieldConfig.id}_check_${index}` }} />}
+                                        {...rest}
+                                    />
+                                )
+                            })
                         ) : (
                             <FormControlLabel
                                 control={<Checkbox checked={(value || false)} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange}  {...checkboxProps} />}

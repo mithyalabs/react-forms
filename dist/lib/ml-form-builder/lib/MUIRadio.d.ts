@@ -1,13 +1,9 @@
+import { FormControlLabelProps, FormControlProps, FormHelperTextProps, FormLabelProps, RadioGroupProps, RadioProps } from '@material-ui/core';
 import * as React from 'react';
 import { IFieldProps } from '../index';
-import { FormHelperTextProps, FormControlProps, RadioGroupProps, RadioProps, FormControlLabelProps, FormLabelProps } from '@material-ui/core';
-import { MenuOptionObject } from '../Utils';
-export declare type MenuOptionObj = MenuOptionObject & {
-    controlProps?: FormControlLabelProps;
-};
-export declare type RadioMenuOptions = Array<string> | Array<MenuOptionObj>;
+import { MenuOptions } from '../Utils';
 export interface IMUIRadioProps {
-    options?: RadioMenuOptions;
+    options?: MenuOptions<FormControlLabelProps>;
     header?: string;
     name?: string;
     id?: string;

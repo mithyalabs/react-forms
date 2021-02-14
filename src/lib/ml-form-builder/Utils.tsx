@@ -5,11 +5,10 @@ import { TFile } from './lib/MUIFileInput';
 
 
 
-export type MenuOptionObject = { name: string | React.ReactNode, value: string };
-export type MenuOptions = Array<string> | Array<MenuOptionObject>;
+export type MenuOptionObject<T = unknown> = { name: string | React.ReactNode, value: string } & T;
+export type MenuOptions<T> = Array<string> | Array<MenuOptionObject<T>>;
 export type ReadAsType = keyof Pick<FileReader, 'readAsBinaryString' | 'readAsDataURL' | 'readAsArrayBuffer' | 'readAsText'>
-
-export const getMenuOptions = (options: MenuOptions) => {
+export const getMenuOptions = <T extends any>(options: MenuOptions<T>) => {
 	return map(options, (item) => {
 		if (isString(item))
 			return { name: item, value: item };
@@ -52,7 +51,6 @@ export const processFilesWithCallback = (files: FileList | File[], callback: Fun
 		};
 		reader[readAs || 'readAsDataURL'](file, encoding);
 		// This works but remember only readAsText can take encoding as a parameter. Might want to mention this in the documentation.
-		console.log(imgFiles, remFiles)
 
 	});
 }

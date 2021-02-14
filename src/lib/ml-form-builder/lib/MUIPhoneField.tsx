@@ -4,6 +4,7 @@ import {
   FormControl,
   FormControlProps,
   InputLabel,
+  InputLabelProps,
   Select,
   SelectProps,
   TextField,
@@ -26,8 +27,11 @@ export interface IMUIPhoneFieldProps {
   countryCodeFormControlProps?: FormControlProps;
   phoneNumberProps?: TextFieldProps;
   phoneLabel?: string;
-  countryCodeContainerProps: BoxProps;
-  phoneContainerProps: BoxProps;
+  countryCodeContainerProps?: BoxProps;
+  phoneContainerProps?: BoxProps;
+  inputLabelProps?: InputLabelProps
+  emptyItem?: string | boolean;
+  emptyItemText?: string
 }
 
 export interface MUIPhoneFieldProps extends IFieldProps {
@@ -41,7 +45,6 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
     fieldConfig,
   } = props;
   const [code, setCode] = useState<string>("");
-  const error = getFieldError(fieldProps.name || "", formikProps);
   const classes = useStyles();
   const value = get(formikProps, `values.${fieldProps.name}`) || "";
   const {
@@ -49,9 +52,12 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
     phoneNumberProps,
     countryCodeLabel,
     phoneLabel,
-    countryCodeFormControlProps,
-    countryCodeContainerProps,
+    countryCodeFormControlProps = {},
+    countryCodeContainerProps = {},
+    inputLabelProps = {},
     phoneContainerProps,
+    emptyItem,
+    emptyItemText
   } = fieldProps;
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,14 +73,15 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (formikProps && formikProps.handleBlur) formikProps?.handleBlur(e);
   };
-  let newError = formikProps.errors[`${fieldProps.name}`];
+  const newError = getFieldError(fieldProps.name || '', formikProps) //formikProps.errors[`${fieldProps.name}`];
+  const error = !!newError;
 
   return (
     <>
       <Box width="100%" display="flex" alignItems="flex-end">
         <Box width="30%" {...countryCodeContainerProps}>
-          <FormControl fullWidth {...countryCodeFormControlProps}>
-            <InputLabel id={fieldProps.name}>
+          <FormControl fullWidth error={error} {...countryCodeFormControlProps}>
+            <InputLabel id={fieldProps.name} {...inputLabelProps}>
               {countryCodeLabel || "Country code"}
             </InputLabel>
             <Select
@@ -84,7 +91,13 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
               {...countryCodeProps}
               native
             >
-              {COUNTRY_LIST.map((country,index) => {
+              {
+                (emptyItem) &&
+                (<option value=''>
+                  {emptyItemText}
+                </option>)
+              }
+              {COUNTRY_LIST.map((country, index) => {
                 if (!country.dial_code) return null;
                 return (
                   <option
@@ -107,13 +120,13 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
             autoComplete="nope"
             type="tel"
             value={value.split("-")[1] || ""}
-            error={error ? true : false}
+            error={error}
             onChange={onChange}
             {...phoneNumberProps}
           ></TextField>
         </Box>
       </Box>
-      {newError && (
+      {error && (
         <Typography
           variant="overline"
           className={newError ? classes.errorField : ""}

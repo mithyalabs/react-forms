@@ -131,7 +131,6 @@ var processFilesWithCallback = function (files, callback, readAs, encoding) {
         };
         reader[readAs || 'readAsDataURL'](file, encoding);
         // This works but remember only readAsText can take encoding as a parameter. Might want to mention this in the documentation.
-        console.log(imgFiles, remFiles);
     });
 };
 var setValue = function (value, formikProps, fieldProps) {
@@ -148,7 +147,6 @@ var MUITextField = function (props) {
     var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
     var fieldError = getFieldError((fieldProps.name || ''), formikProps);
     var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || '', onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: lodash.get(formikProps, "values." + fieldProps.name) || '' });
-    // console.log('Text field props read only', isReadOnly);
     if (isReadOnly) {
         return (React.createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
@@ -160,6 +158,7 @@ var MUISelectField = function (props) {
     var label = fieldProps.label, _d = fieldProps.options, options = _d === void 0 ? [] : _d, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _e = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _e === void 0 ? {} : _e, _f = fieldProps.menuItemProps, menuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.inputLabelProps, inputLabelProps = _g === void 0 ? {} : _g, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
     var labelId = fieldConfig.id + "_label";
     var fieldError = getFieldError(fieldProps.name || "", formikProps);
+    var error = !!fieldError;
     var emptyItemText = lodash.isString(emptyItem) ? emptyItem : "None";
     var menuOptions = getMenuOptions(options);
     var value = lodash.get(formikProps, "values." + fieldProps.name) ||
@@ -167,20 +166,26 @@ var MUISelectField = function (props) {
     var optionsList = [];
     if (selectProps.native) {
         if (menuOptions)
-            optionsList = lodash.map(menuOptions, function (item, index) { return (React.createElement("option", __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); });
+            optionsList = lodash.map(menuOptions, function (item, index) {
+                var name = item.name, value = item.value, rest = __rest(item, ["name", "value"]);
+                return (React.createElement("option", __assign({ key: fieldConfig.id + "_menu_item_" + index, value: value }, menuItemProps, rest), name));
+            });
         if (emptyItem)
             optionsList.unshift(React.createElement("option", __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "", selected: true }, emptyMenuItemProps), emptyItemText));
     }
     else {
         if (menuOptions)
-            optionsList = lodash.map(menuOptions, function (item, index) { return (React.createElement(core.MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: item.value }, menuItemProps), item.name)); });
+            optionsList = lodash.map(menuOptions, function (item, index) {
+                var name = item.name, value = item.value, rest = __rest(item, ["name", "value"]);
+                return (React.createElement(core.MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: value }, menuItemProps, rest), name));
+            });
         if (emptyItem)
             optionsList.unshift(React.createElement(core.MenuItem, __assign({ value: "" }, emptyMenuItemProps), emptyItemText));
     }
-    return (React.createElement(core.FormControl, __assign({ error: !!fieldError }, formControlProps),
+    return (React.createElement(core.FormControl, __assign({ error: error }, formControlProps),
         label && (React.createElement(core.InputLabel, __assign({ id: labelId }, inputLabelProps), label)),
         React.createElement(core.Select, __assign({ labelId: labelId, id: fieldConfig.id, value: value, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, selectProps), optionsList),
-        (fieldError || fieldProps.helperText) && (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError || fieldProps.helperText))));
+        (error) && (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError))));
 };
 
 var MUICheckBox = function (props) {
@@ -193,7 +198,10 @@ var MUICheckBox = function (props) {
         (header) &&
             (React.createElement(core.FormLabel, __assign({}, headerProps), header)),
         React.createElement(core.FormGroup, __assign({}, checkGroupProps), (!lodash.isEmpty(menuOptions)) ?
-            (lodash.map(menuOptions, function (item, index) { return (React.createElement(core.FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, control: React.createElement(core.Checkbox, __assign({ checked: (lodash.indexOf(value, item.value) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))), label: item.name || '' }, formControlLabelProps))); })) : (React.createElement(core.FormControlLabel, __assign({ control: React.createElement(core.Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: isLabelHtmlString ? React.createElement("div", { dangerouslySetInnerHTML: { __html: label } }) : label }, formControlLabelProps)))),
+            (lodash.map(menuOptions, function (item, index) {
+                var option = item.value, name = item.name, control = item.control, rest = __rest(item, ["value", "name", "control"]);
+                return (React.createElement(core.FormControlLabel, __assign({ key: fieldConfig.id + "_check_" + index, label: name || '' }, formControlLabelProps, { control: control !== null && control !== void 0 ? control : React.createElement(core.Checkbox, __assign({ checked: (lodash.indexOf(value, option) > -1), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange, value: item.value }, __assign(__assign({}, checkboxProps), { id: fieldConfig.id + "_check_" + index }))) }, rest)));
+            })) : (React.createElement(core.FormControlLabel, __assign({ control: React.createElement(core.Checkbox, __assign({ checked: (value || false), onBlur: formikProps.handleBlur, onChange: formikProps.handleChange }, checkboxProps)), label: isLabelHtmlString ? React.createElement("div", { dangerouslySetInnerHTML: { __html: label } }) : label }, formControlLabelProps)))),
         (fieldError || helperText) &&
             (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText))));
 };
@@ -205,7 +213,6 @@ var MUISwitch = function (props) {
     var handleOnChange = function () {
         formikProps.setFieldValue(fieldProps.name, !value);
     };
-    // console.log('Switch props', { ...{ ...switchProps, disabled: (switchProps.disabled || isReadOnly) } });
     return (React.createElement(core.FormControlLabel, { control: React.createElement(core.Switch, __assign({ checked: !!value, onChange: handleOnChange, onBlur: formikProps.handleBlur, inputProps: { 'aria-label': 'secondary checkbox' }, value: value }, __assign(__assign({}, switchProps), { disabled: (switchProps.disabled || isReadOnly) }))), label: label || '' }));
 };
 
@@ -219,8 +226,8 @@ var MUIRadio = function (props) {
         (header) &&
             (React.createElement(core.FormLabel, __assign({}, headerProps), header)),
         React.createElement(core.RadioGroup, __assign({ name: fieldProps.name, value: fieldValue, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, radioGroupProps), lodash.map(menuOptions, function (option, index) {
-            var value = option.value, name = option.name, rest = __rest(option, ["value", "name"]);
-            return (React.createElement(core.FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', label: name, control: React.createElement(core.Radio, __assign({}, radioProps)) }, rest)));
+            var value = option.value, name = option.name, control = option.control, rest = __rest(option, ["value", "name", "control"]);
+            return (React.createElement(core.FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', label: name, control: control !== null && control !== void 0 ? control : React.createElement(core.Radio, __assign({}, radioProps)) }, rest)));
         })),
         (fieldError || helperText) &&
             (React.createElement(core.FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText))));
@@ -5726,10 +5733,9 @@ var COUNTRY_LIST = [
 var MUIPhoneField = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b, fieldConfig = props.fieldConfig;
     var _c = React.useState(""), code = _c[0], setCode = _c[1];
-    var error = getFieldError(fieldProps.name || "", formikProps);
     var classes = useStyles$2();
     var value = lodash.get(formikProps, "values." + fieldProps.name) || "";
-    var countryCodeProps = fieldProps.countryCodeProps, phoneNumberProps = fieldProps.phoneNumberProps, countryCodeLabel = fieldProps.countryCodeLabel, phoneLabel = fieldProps.phoneLabel, countryCodeFormControlProps = fieldProps.countryCodeFormControlProps, countryCodeContainerProps = fieldProps.countryCodeContainerProps, phoneContainerProps = fieldProps.phoneContainerProps;
+    var countryCodeProps = fieldProps.countryCodeProps, phoneNumberProps = fieldProps.phoneNumberProps, countryCodeLabel = fieldProps.countryCodeLabel, phoneLabel = fieldProps.phoneLabel, _d = fieldProps.countryCodeFormControlProps, countryCodeFormControlProps = _d === void 0 ? {} : _d, _e = fieldProps.countryCodeContainerProps, countryCodeContainerProps = _e === void 0 ? {} : _e, _f = fieldProps.inputLabelProps, inputLabelProps = _f === void 0 ? {} : _f, phoneContainerProps = fieldProps.phoneContainerProps, emptyItem = fieldProps.emptyItem, emptyItemText = fieldProps.emptyItemText;
     var onChange = function (event) {
         event.preventDefault();
         var number = event.target.value.replace("-", "");
@@ -5742,22 +5748,26 @@ var MUIPhoneField = function (props) {
         if (formikProps && formikProps.handleBlur)
             formikProps === null || formikProps === void 0 ? void 0 : formikProps.handleBlur(e);
     };
-    var newError = formikProps.errors["" + fieldProps.name];
+    var newError = getFieldError(fieldProps.name || '', formikProps); //formikProps.errors[`${fieldProps.name}`];
+    var error = !!newError;
     return (React__default.createElement(React__default.Fragment, null,
         React__default.createElement(core.Box, { width: "100%", display: "flex", alignItems: "flex-end" },
             React__default.createElement(core.Box, __assign({ width: "30%" }, countryCodeContainerProps),
-                React__default.createElement(core.FormControl, __assign({ fullWidth: true }, countryCodeFormControlProps),
-                    React__default.createElement(core.InputLabel, { id: fieldProps.name }, countryCodeLabel || "Country code"),
-                    React__default.createElement(core.Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps, { native: true }), COUNTRY_LIST.map(function (country, index) {
-                        if (!country.dial_code)
-                            return null;
-                        return (React__default.createElement("option", { key: index, value: country.dial_code }, country.name + " (" + country.dial_code + ")"));
-                    })))),
+                React__default.createElement(core.FormControl, __assign({ fullWidth: true, error: error }, countryCodeFormControlProps),
+                    React__default.createElement(core.InputLabel, __assign({ id: fieldProps.name }, inputLabelProps), countryCodeLabel || "Country code"),
+                    React__default.createElement(core.Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps, { native: true }),
+                        (emptyItem) &&
+                            (React__default.createElement("option", { value: '' }, emptyItemText)),
+                        COUNTRY_LIST.map(function (country, index) {
+                            if (!country.dial_code)
+                                return null;
+                            return (React__default.createElement("option", { key: index, value: country.dial_code }, country.name + " (" + country.dial_code + ")"));
+                        })))),
             React__default.createElement(core.Box, __assign({ width: "70%", marginLeft: "5px" }, phoneContainerProps),
                 React__default.createElement(core.TextField, __assign({ fullWidth: true, label: phoneLabel || "Phone", InputProps: {
                         name: fieldConfig === null || fieldConfig === void 0 ? void 0 : fieldConfig.valueKey,
-                    }, onBlur: handleBlur, autoComplete: "nope", type: "tel", value: value.split("-")[1] || "", error: error ? true : false, onChange: onChange }, phoneNumberProps)))),
-        newError && (React__default.createElement(core.Typography, { variant: "overline", className: newError ? classes.errorField : "" }, newError))));
+                    }, onBlur: handleBlur, autoComplete: "nope", type: "tel", value: value.split("-")[1] || "", error: error, onChange: onChange }, phoneNumberProps)))),
+        error && (React__default.createElement(core.Typography, { variant: "overline", className: newError ? classes.errorField : "" }, newError))));
 };
 var useStyles$2 = makeStyles(function () {
     return styles.createStyles({

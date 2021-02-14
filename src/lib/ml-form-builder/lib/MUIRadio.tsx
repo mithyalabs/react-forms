@@ -1,14 +1,13 @@
+import { FormControl, FormControlLabel, FormControlLabelProps, FormControlProps, FormHelperText, FormHelperTextProps, FormLabel, FormLabelProps, Radio, RadioGroup, RadioGroupProps, RadioProps } from '@material-ui/core';
+import { FormikValues } from 'formik';
+import { get, map } from 'lodash';
 import * as React from 'react';
 import { IFieldProps } from '../index';
-import { FormikValues } from 'formik';
-import { FormLabel, FormControlLabel, FormHelperText, FormHelperTextProps, FormControl, FormControlProps, RadioGroup, RadioGroupProps, Radio, RadioProps, FormControlLabelProps, FormLabelProps } from '@material-ui/core';
-import { get, map } from 'lodash';
-import { MenuOptionObject, getMenuOptions, getFieldError } from '../Utils';
+import { getFieldError, getMenuOptions, MenuOptionObject, MenuOptions } from '../Utils';
 
-export type MenuOptionObj = MenuOptionObject & { controlProps?: FormControlLabelProps };
-export type RadioMenuOptions = Array<string> | Array<MenuOptionObj>;
+
 export interface IMUIRadioProps {
-    options?: RadioMenuOptions
+    options?: MenuOptions<FormControlLabelProps>
     header?: string
     name?: string
     id?: string,
@@ -39,14 +38,14 @@ export const MUIRadio: React.FC<IProps> = props => {
             }
             <RadioGroup name={fieldProps.name} value={fieldValue} onChange={formikProps.handleChange} onBlur={formikProps.handleBlur} {...radioGroupProps}>
                 {
-                    map(menuOptions, (option: MenuOptionObj, index: number) => {
-                        const { value, name, ...rest } = option;
+                    map(menuOptions, (option: MenuOptionObject<FormControlLabelProps>, index: number) => {
+                        const { value, name, control, ...rest } = option;
                         return (
                             <FormControlLabel
                                 key={`${fieldProps.id}_option_item_${index}`}
                                 value={value + ''}
                                 label={name}
-                                control={<Radio {...radioProps} />}
+                                control={control ?? <Radio {...radioProps} />}
                                 {...rest}
                             />
                         )
