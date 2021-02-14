@@ -21,7 +21,6 @@ export const MUISwitch: React.FC<ISwitchProps> = (props) => {
     const handleOnChange = () => {
         formikProps.setFieldValue(fieldProps.name, !value);
     }
-    // console.log('Switch props', { ...{ ...switchProps, disabled: (switchProps.disabled || isReadOnly) } });
     return (
         <FormControlLabel
             control={

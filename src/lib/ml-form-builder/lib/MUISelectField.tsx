@@ -23,7 +23,7 @@ import {
 
 export interface IMUISelectProps extends SelectProps {
   label?: string;
-  options?: MenuOptions;
+  options?: MenuOptions<MenuItemProps>;
   emptyItem?: string | boolean;
   helperText?: string;
   formControlProps?: FormControlProps;
@@ -57,6 +57,7 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
   } = fieldProps;
   const labelId = `${fieldConfig.id}_label`;
   const fieldError = getFieldError(fieldProps.name || "", formikProps);
+  const error = !!fieldError;
   const emptyItemText = isString(emptyItem) ? emptyItem : "None";
   const menuOptions = getMenuOptions(options);
   const value =
@@ -68,15 +69,20 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
     if (menuOptions)
       optionsList = map<any, JSX.Element>(
         menuOptions,
-        (item: MenuOptionObject, index: number) => (
-          <option
-            key={`${fieldConfig.id}_menu_item_${index}`}
-            value={item.value}
-            {...menuItemProps}
-          >
-            {item.name}
-          </option>
-        )
+        (item: MenuOptionObject, index: number) => {
+          const { name, value, ...rest } = item;
+          return (
+            <option
+
+              key={`${fieldConfig.id}_menu_item_${index}`}
+              value={value}
+              {...menuItemProps}
+              {...rest}
+            >
+              {name}
+            </option>
+          )
+        }
       );
 
     if (emptyItem)
@@ -94,15 +100,19 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
     if (menuOptions)
       optionsList = map<any, JSX.Element>(
         menuOptions,
-        (item: MenuOptionObject, index: number) => (
-          <MenuItem
-            key={`${fieldConfig.id}_menu_item_${index}`}
-            value={item.value}
-            {...menuItemProps}
-          >
-            {item.name}
-          </MenuItem>
-        )
+        (item: MenuOptionObject, index: number) => {
+          const { name, value, ...rest } = item;
+          return (
+            <MenuItem
+              key={`${fieldConfig.id}_menu_item_${index}`}
+              value={value}
+              {...menuItemProps}
+              {...rest}
+            >
+              {name}
+            </MenuItem>
+          )
+        }
       );
 
     if (emptyItem)
@@ -114,7 +124,7 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
   }
 
   return (
-    <FormControl error={!!fieldError} {...formControlProps}>
+    <FormControl error={error} {...formControlProps}>
       {label && (
         <InputLabel id={labelId} {...inputLabelProps}>
           {label}
@@ -130,9 +140,9 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
       >
         {optionsList}
       </Select>
-      {(fieldError || fieldProps.helperText) && (
+      {(error) && (
         <FormHelperText {...formHelperTextProps}>
-          {fieldError || fieldProps.helperText}
+          {fieldError}
         </FormHelperText>
       )}
     </FormControl>
