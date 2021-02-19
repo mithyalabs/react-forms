@@ -13,7 +13,7 @@ export interface IMUIFileInputProps {
     onDone?: (imgFiles: TFile[], remFiles?: File[]) => void;
     wrapWith?: (input: JSX.Element) => JSX.Element;
     nativeInputProps?: React.InputHTMLAttributes<{}>;
-    inputClasses: string | string[];
+    inputClasses?: string | string[];
 }
 export interface IFileInputProps extends IFieldProps {
     fieldProps?: IMUIFileInputProps;

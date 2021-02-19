@@ -20,7 +20,7 @@ export interface IMUIFileInputProps {
   /* Function passed to wrapWith should take the input Element and return the same within the wrapped element.
 	The input element is always invisible if wrapWith is provided */
   nativeInputProps?: React.InputHTMLAttributes<{}>;
-  inputClasses: string | string[];
+  inputClasses?: string | string[];
 }
 
 export interface IFileInputProps extends IFieldProps {
