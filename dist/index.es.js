@@ -49,37 +49,40 @@ function __rest(s, e) {
 
 function toVal(mix) {
 	var k, y, str='';
-	if (mix) {
-		if (typeof mix === 'object') {
-			if (Array.isArray(mix)) {
-				for (k=0; k < mix.length; k++) {
-					if (mix[k] && (y = toVal(mix[k]))) {
-						str && (str += ' ');
-						str += y;
-					}
-				}
-			} else {
-				for (k in mix) {
-					if (mix[k] && (y = toVal(k))) {
+
+	if (typeof mix === 'string' || typeof mix === 'number') {
+		str += mix;
+	} else if (typeof mix === 'object') {
+		if (Array.isArray(mix)) {
+			for (k=0; k < mix.length; k++) {
+				if (mix[k]) {
+					if (y = toVal(mix[k])) {
 						str && (str += ' ');
 						str += y;
 					}
 				}
 			}
-		} else if (typeof mix !== 'boolean' && !mix.call) {
-			str && (str += ' ');
-			str += mix;
+		} else {
+			for (k in mix) {
+				if (mix[k]) {
+					str && (str += ' ');
+					str += k;
+				}
+			}
 		}
 	}
+
 	return str;
 }
 
 function clsx () {
-	var i=0, x, str='';
+	var i=0, tmp, x, str='';
 	while (i < arguments.length) {
-		if (x = toVal(arguments[i++])) {
-			str && (str += ' ');
-			str += x;
+		if (tmp = arguments[i++]) {
+			if (x = toVal(tmp)) {
+				str && (str += ' ');
+				str += x;
+			}
 		}
 	}
 	return str;
@@ -269,8 +272,9 @@ var useStyles = makeStyles$1(function () {
 });
 
 var MUIFileInput = function (props) {
-    var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
-    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _c = fieldProps.encoding, encoding = _c === void 0 ? 'utf-8' : _c;
+    var _a;
+    var _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
+    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _d = fieldProps.encoding, encoding = _d === void 0 ? "utf-8" : _d, inputClasses = fieldProps.inputClasses;
     var classes = useStyles$1();
     var handleChange = function (event) {
         var files = event.target.files || new FileList();
@@ -285,12 +289,24 @@ var MUIFileInput = function (props) {
             setValue(files, formikProps, fieldProps);
         }, readAs, encoding);
     };
-    var input = React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: invisible || wrapWith ? classes.invisibleInput : "", title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps));
-    return (React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input));
+    var input = (React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: clsx((_a = {}, _a[classes.invisibleInput] = invisible || !!wrapWith, _a), inputClasses), title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps)));
+    return React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input);
 };
-var useStyles$1 = makeStyles$2(function () { return createStyles$1({
-    invisibleInput: { opacity: 0, width: '100%', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, cursor: 'pointer' }
-}); });
+var useStyles$1 = makeStyles$2(function () {
+    return createStyles$1({
+        invisibleInput: {
+            opacity: 0,
+            width: "100%",
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            cursor: "pointer",
+            zIndex: 5,
+        },
+    });
+});
 
 function _extends() {
   _extends = Object.assign || function (target) {

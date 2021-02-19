@@ -49,5 +49,7 @@
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "clsx": "^1.1.1"
+  }
 }

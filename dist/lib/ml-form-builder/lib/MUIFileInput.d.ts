@@ -1,6 +1,6 @@
-import React from 'react';
-import { IFieldProps } from '..';
-import { ReadAsType } from '../Utils';
+import React from "react";
+import { IFieldProps } from "..";
+import { ReadAsType } from "../Utils";
 export interface IMUIFileInputProps {
     readAs?: ReadAsType;
     encoding?: string;
@@ -13,6 +13,7 @@ export interface IMUIFileInputProps {
     onDone?: (imgFiles: TFile[], remFiles?: File[]) => void;
     wrapWith?: (input: JSX.Element) => JSX.Element;
     nativeInputProps?: React.InputHTMLAttributes<{}>;
+    inputClasses: string | string[];
 }
 export interface IFileInputProps extends IFieldProps {
     fieldProps?: IMUIFileInputProps;
