@@ -4,21 +4,22 @@ import {
   FormControl,
   FormControlProps,
   InputLabel,
-  InputLabelProps,
   Select,
   SelectProps,
   TextField,
   TextFieldProps,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { createStyles, Theme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/styles";
 import { FormikValues } from "formik";
 import { get } from "lodash";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IFieldProps } from "..";
 import { getFieldError } from "../Utils";
-import { COUNTRY_LIST } from "./Constants/CountryList";
+import { COUNTRY_LIST } from "./Constants";
+
+
 
 export interface IMUIPhoneFieldProps {
   name?: string;
@@ -27,9 +28,8 @@ export interface IMUIPhoneFieldProps {
   countryCodeFormControlProps?: FormControlProps;
   phoneNumberProps?: TextFieldProps;
   phoneLabel?: string;
-  countryCodeContainerProps?: BoxProps;
-  phoneContainerProps?: BoxProps;
-  inputLabelProps?: InputLabelProps
+  countryCodeContainerProps: BoxProps;
+  phoneContainerProps: BoxProps;
   emptyItem?: string | boolean;
   emptyItemText?: string
 }
@@ -46,15 +46,20 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
   } = props;
   const [code, setCode] = useState<string>("");
   const classes = useStyles();
-  const value = get(formikProps, `values.${fieldProps.name}`) || "";
+  const value = (get(formikProps, `values.${fieldProps.name}`) || "") as string;
+  useEffect(() => {
+    if (value) {
+      setCode(value.split('-')[0] || '')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldProps.name])
   const {
     countryCodeProps,
     phoneNumberProps,
     countryCodeLabel,
     phoneLabel,
-    countryCodeFormControlProps = {},
-    countryCodeContainerProps = {},
-    inputLabelProps = {},
+    countryCodeFormControlProps,
+    countryCodeContainerProps,
     phoneContainerProps,
     emptyItem,
     emptyItemText
@@ -67,6 +72,8 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
     formikProps.setFieldValue(`${fieldProps.name}`, `${code}-${number}`);
   };
   const codeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    let number = value.split("-");
+    formikProps.setFieldValue(`${fieldProps.name}`, `${e.target.value as string}-${number[1] || ''}`);
     setCode(e.target.value as string);
   };
 
@@ -75,13 +82,12 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
   };
   const newError = getFieldError(fieldProps.name || '', formikProps) //formikProps.errors[`${fieldProps.name}`];
   const error = !!newError;
-
   return (
     <>
       <Box width="100%" display="flex" alignItems="flex-end">
         <Box width="30%" {...countryCodeContainerProps}>
-          <FormControl fullWidth error={error} {...countryCodeFormControlProps}>
-            <InputLabel id={fieldProps.name} {...inputLabelProps}>
+          <FormControl fullWidth {...countryCodeFormControlProps} error={error}>
+            <InputLabel id={fieldProps.name}>
               {countryCodeLabel || "Country code"}
             </InputLabel>
             <Select
@@ -122,6 +128,7 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
             value={value.split("-")[1] || ""}
             error={error}
             onChange={onChange}
+            className={classes.tf}
             {...phoneNumberProps}
           ></TextField>
         </Box>
@@ -145,8 +152,10 @@ const useStyles = makeStyles<Theme>(() => {
       fontSize: 12,
       fontWeight: "bold",
       textTransform: "none",
-      marginLeft: "30%",
     },
+    tf: {
+
+    }
   });
 });
 
