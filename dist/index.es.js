@@ -1,13 +1,12 @@
 import React__default, { createElement, useState as useState$1, cloneElement, Fragment as Fragment$1, useEffect as useEffect$1 } from 'react';
 import Button$1 from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles as makeStyles$1, createStyles } from '@material-ui/core/styles';
+import { makeStyles as makeStyles$2, createStyles as createStyles$1 } from '@material-ui/core/styles';
 import { map, isString, get, isEmpty, indexOf, forEach, isArray, isFunction, uniqueId } from 'lodash';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { MenuItem, FormControl, InputLabel, Select, FormHelperText, FormLabel, FormGroup, FormControlLabel, Checkbox, Switch, RadioGroup, Radio, IconButton, Button, makeStyles as makeStyles$2, createStyles as createStyles$1, Box, TextField as TextField$1, Typography as Typography$1 } from '@material-ui/core';
+import { TextField, makeStyles as makeStyles$1, createStyles, MenuItem, FormControl, InputLabel, Select, FormHelperText, FormLabel, FormGroup, FormControlLabel, Checkbox, Switch, RadioGroup, Radio, IconButton, Button, Box, Typography as Typography$1 } from '@material-ui/core';
 import { FieldArray, Formik } from 'formik';
 import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -133,21 +132,33 @@ var setValue = function (value, formikProps, fieldProps) {
     formikProps.setFieldValue(get(fieldProps, 'name'), value);
 };
 
-var MUIReadOnly = function (props) {
-    return (createElement("div", null,
-        createElement(Typography, { variant: "subtitle1" }, props.label || ''),
-        createElement(Typography, null, props.value || 'NA')));
-};
-
 var MUITextField = function (props) {
     var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
-    var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || '', onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: get(formikProps, "values." + fieldProps.name) || '' });
+    var classes = useStyles();
+    var fieldError = getFieldError(fieldProps.name || "", formikProps);
+    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || "", onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: get(formikProps, "values." + fieldProps.name) || "", className: clsx(formikProps.className, classes.input) });
     if (isReadOnly) {
-        return (createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
+        return (React__default.createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
-    return (createElement(TextField, __assign({}, updatedProps)));
+    return React__default.createElement(TextField, __assign({}, updatedProps));
 };
+var useStyles = makeStyles$1(function () {
+    return createStyles({
+        input: {
+            '& input[type="number"]': {
+                "& ::-webkit-outer-spin-button": {
+                    "-webkit-appearance": "none",
+                    margin: 0,
+                },
+                "&::-webkit-inner-spin-button": {
+                    "-webkit-appearance": "none",
+                    margin: 0,
+                },
+                appearance: "textfield",
+            },
+        },
+    });
+});
 
 var MUISelectField = function (props) {
     var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
@@ -249,7 +260,7 @@ var MUIFieldArray = function (props) {
     var itemType = fieldProps.itemType, _c = fieldProps.addButtonText, addButtonText = _c === void 0 ? 'Add' : _c, addButtonProps = fieldProps.addButtonProps, addButton = fieldProps.addButton, removeButton = fieldProps.removeButton, removeButtonProps = fieldProps.removeButtonProps, _d = fieldProps.textFieldProps, textFieldProps = _d === void 0 ? {} : _d;
     var values = get(formikProps, "values." + fieldProps.name);
     var itemComponentConfig = getComponentConfig(itemType);
-    var classes = useStyles();
+    var classes = useStyles$1();
     return (React__default.createElement(FieldArray, { name: fieldProps.name, render: function (arrayHelpers) { return (React__default.createElement("div", null,
             (values || []).map(function (value, index) { return (React__default.createElement("div", { key: fieldProps.name + "-" + index, className: classes.arrayItem },
                 React__default.cloneElement(itemComponentConfig.component, __assign(__assign({ name: fieldProps.name, itemIndex: index, arrayHelpers: arrayHelpers, fieldValue: value, formikProps: formikProps }, itemComponentConfig.props), textFieldProps)),
@@ -257,8 +268,8 @@ var MUIFieldArray = function (props) {
                     React__default.createElement(CloseIcon, null))))); }),
             (addButton) ? addButton : (React__default.createElement(Button, __assign({ type: "button", onClick: function () { return arrayHelpers.push({}); } }, addButtonProps), addButtonText)))); } }));
 };
-var useStyles = makeStyles$1(function () {
-    return (createStyles({
+var useStyles$1 = makeStyles$2(function () {
+    return (createStyles$1({
         arrayItem: {
             position: 'relative'
         },
@@ -271,11 +282,17 @@ var useStyles = makeStyles$1(function () {
     }));
 });
 
+var MUIReadOnly = function (props) {
+    return (createElement("div", null,
+        createElement(Typography, { variant: "subtitle1" }, props.label || ''),
+        createElement(Typography, null, props.value || 'NA')));
+};
+
 var MUIFileInput = function (props) {
     var _a;
     var _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
     var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _d = fieldProps.encoding, encoding = _d === void 0 ? "utf-8" : _d, inputClasses = fieldProps.inputClasses;
-    var classes = useStyles$1();
+    var classes = useStyles$2();
     var handleChange = function (event) {
         var files = event.target.files || new FileList();
         if (onFilesChange) {
@@ -292,8 +309,8 @@ var MUIFileInput = function (props) {
     var input = (React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: clsx((_a = {}, _a[classes.invisibleInput] = invisible || !!wrapWith, _a), inputClasses), title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps)));
     return React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input);
 };
-var useStyles$1 = makeStyles$2(function () {
-    return createStyles$1({
+var useStyles$2 = makeStyles$1(function () {
+    return createStyles({
         invisibleInput: {
             opacity: 0,
             width: "100%",
@@ -5742,7 +5759,7 @@ var COUNTRY_LIST = [
 var MUIPhoneField = function (props) {
     var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b, fieldConfig = props.fieldConfig;
     var _c = useState$1(""), code = _c[0], setCode = _c[1];
-    var classes = useStyles$2();
+    var classes = useStyles$3();
     var value = get(formikProps, "values." + fieldProps.name) || "";
     var countryCodeProps = fieldProps.countryCodeProps, phoneNumberProps = fieldProps.phoneNumberProps, countryCodeLabel = fieldProps.countryCodeLabel, phoneLabel = fieldProps.phoneLabel, _d = fieldProps.countryCodeFormControlProps, countryCodeFormControlProps = _d === void 0 ? {} : _d, _e = fieldProps.countryCodeContainerProps, countryCodeContainerProps = _e === void 0 ? {} : _e, _f = fieldProps.inputLabelProps, inputLabelProps = _f === void 0 ? {} : _f, phoneContainerProps = fieldProps.phoneContainerProps, emptyItem = fieldProps.emptyItem, emptyItemText = fieldProps.emptyItemText;
     var onChange = function (event) {
@@ -5773,13 +5790,13 @@ var MUIPhoneField = function (props) {
                             return (React__default.createElement("option", { key: index, value: country.dial_code }, country.name + " (" + country.dial_code + ")"));
                         })))),
             React__default.createElement(Box, __assign({ width: "70%", marginLeft: "5px" }, phoneContainerProps),
-                React__default.createElement(TextField$1, __assign({ fullWidth: true, label: phoneLabel || "Phone", InputProps: {
+                React__default.createElement(TextField, __assign({ fullWidth: true, label: phoneLabel || "Phone", InputProps: {
                         name: fieldConfig === null || fieldConfig === void 0 ? void 0 : fieldConfig.valueKey,
                     }, onBlur: handleBlur, autoComplete: "nope", type: "tel", value: value.split("-")[1] || "", error: error, onChange: onChange }, phoneNumberProps)))),
         error && (React__default.createElement(Typography$1, { variant: "overline", className: newError ? classes.errorField : "" }, newError))));
 };
-var useStyles$2 = makeStyles(function () {
-    return createStyles({
+var useStyles$3 = makeStyles(function () {
+    return createStyles$1({
         errorField: {
             color: "#B71840",
             fontSize: 12,
@@ -5972,8 +5989,8 @@ var MLFormBuilder = function (props) {
         createElement(MLFormContent, __assign({}, props)),
         actionConfig.displayActions !== false && (createElement(MLFormAction, __assign({ formId: props.formId, formikProps: formikProps }, actionConfig)))));
 };
-var useFormStyles = makeStyles$1(function () {
-    return createStyles({
+var useFormStyles = makeStyles$2(function () {
+    return createStyles$1({
         row: {
             display: "flex",
         },

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField';
-import { IFieldProps } from '../index';
+import { TextFieldProps } from "@material-ui/core";
+import React from "react";
+import { IFieldProps } from "..";
 export interface IProps extends IFieldProps {
     fieldProps?: TextFieldProps;
 }
