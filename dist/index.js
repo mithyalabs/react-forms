@@ -5797,6 +5797,12 @@ var useStyles$2 = makeStyles(function () {
     });
 });
 
+var PlainText = function (props) {
+    var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a;
+    var _b = fieldProps.isTextHtmlString, isTextHtmlString = _b === void 0 ? false : _b, _c = fieldProps.text, text = _c === void 0 ? "" : _c, _d = fieldProps.typographyProps, typographyProps = _d === void 0 ? {} : _d, _e = fieldProps.className, className = _e === void 0 ? "" : _e;
+    return (React__default.createElement(React__default.Fragment, null, isTextHtmlString && typeof text === "string" ? (React__default.createElement("div", { className: className, dangerouslySetInnerHTML: { __html: text } })) : (React__default.createElement(core.Typography, __assign({}, typographyProps), text))));
+};
+
 var compare = function (value1, operator, value2) {
     switch (operator) {
         case '>': return value1 > value2;
@@ -5886,6 +5892,7 @@ attachField("radio", React.createElement(MUIRadio, null));
 attachField("array", React.createElement(MUIFieldArray, null));
 attachField("file", React.createElement(MUIFileInput, null));
 attachField("phone", React.createElement(MUIPhoneField, null));
+attachField("mui-plain-text", React.createElement(PlainText, null));
 var BuildFormRow = function (props) {
     var schema = props.schema, rowId = props.rowId, _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.settings, settings = _b === void 0 ? {
         horizontalSpacing: 10,

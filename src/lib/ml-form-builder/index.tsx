@@ -21,6 +21,7 @@ import {
   getConditionalProps,
   TFieldConditions,
 } from "./lib/ConditionalOperation";
+import PlainText from "./lib/PlainText";
 
 const { useEffect, useState } = React;
 
@@ -131,7 +132,7 @@ attachField("radio", <MUIRadio />);
 attachField("array", <MUIFieldArray />);
 attachField("file", <MUIFileInput />);
 attachField("phone", <MUIPhoneField />);
-
+attachField("mui-plain-text", <PlainText />);
 export const BuildFormRow: React.FC<FormRowProps> = (props) => {
   const {
     schema,

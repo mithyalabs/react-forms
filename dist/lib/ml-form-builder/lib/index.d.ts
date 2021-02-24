@@ -8,3 +8,4 @@ export * from './MUIReadOnly';
 export * from './MUIFileInput';
 export * from './MUIPhoneField';
 export * from './Constants';
+export * from './PlainText';
