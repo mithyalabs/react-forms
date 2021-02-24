@@ -1,4 +1,4 @@
-import { BoxProps, FormControlProps, InputLabelProps, SelectProps, TextFieldProps } from "@material-ui/core";
+import { BoxProps, FormControlProps, SelectProps, TextFieldProps } from "@material-ui/core";
 import { FC } from "react";
 import { IFieldProps } from "..";
 export interface IMUIPhoneFieldProps {
@@ -8,9 +8,8 @@ export interface IMUIPhoneFieldProps {
     countryCodeFormControlProps?: FormControlProps;
     phoneNumberProps?: TextFieldProps;
     phoneLabel?: string;
-    countryCodeContainerProps?: BoxProps;
-    phoneContainerProps?: BoxProps;
-    inputLabelProps?: InputLabelProps;
+    countryCodeContainerProps: BoxProps;
+    phoneContainerProps: BoxProps;
     emptyItem?: string | boolean;
     emptyItemText?: string;
 }
