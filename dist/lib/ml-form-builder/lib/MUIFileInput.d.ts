@@ -14,6 +14,7 @@ export interface IMUIFileInputProps {
     wrapWith?: (input: JSX.Element) => JSX.Element;
     nativeInputProps?: React.InputHTMLAttributes<{}>;
     inputClasses?: string | string[];
+    name: string;
 }
 export interface IFileInputProps extends IFieldProps {
     fieldProps?: IMUIFileInputProps;

@@ -301,8 +301,9 @@ var MUIReadOnly = function (props) {
 var MUIFileInput = function (props) {
     var _a;
     var _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
-    var onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _d = fieldProps.encoding, encoding = _d === void 0 ? "utf-8" : _d, inputClasses = fieldProps.inputClasses;
+    var name = fieldProps.name, onDone = fieldProps.onDone, multiple = fieldProps.multiple, invisible = fieldProps.invisible, disableDefaultTooltip = fieldProps.disableDefaultTooltip, accept = fieldProps.accept, readAs = fieldProps.readAs, disabled = fieldProps.disabled, onFilesChange = fieldProps.onFilesChange, wrapWith = fieldProps.wrapWith, nativeInputProps = fieldProps.nativeInputProps, _d = fieldProps.encoding, encoding = _d === void 0 ? "utf-8" : _d, inputClasses = fieldProps.inputClasses;
     var classes = useStyles$2();
+    var errorText = getFieldError(name, formikProps);
     var handleChange = function (event) {
         var files = event.target.files || new FileList();
         if (onFilesChange) {
@@ -317,7 +318,9 @@ var MUIFileInput = function (props) {
         }, readAs, encoding);
     };
     var input = (React__default.createElement("input", __assign({ type: "file", disabled: disabled, multiple: multiple, className: clsx((_a = {}, _a[classes.invisibleInput] = invisible || !!wrapWith, _a), inputClasses), title: disableDefaultTooltip ? " " : undefined, accept: accept, onChange: handleChange }, nativeInputProps)));
-    return React__default.createElement(React__default.Fragment, null, wrapWith ? wrapWith(input) : input);
+    return React__default.createElement(React__default.Fragment, null,
+        wrapWith ? wrapWith(input) : input,
+        !!errorText ? React__default.createElement(core.FormHelperText, { error: true }, errorText) : null);
 };
 var useStyles$2 = core.makeStyles(function () {
     return core.createStyles({
