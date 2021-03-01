@@ -168,7 +168,6 @@ var MUISelectField = function (props) {
     var label = fieldProps.label, _d = fieldProps.options, options = _d === void 0 ? [] : _d, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _e = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _e === void 0 ? {} : _e, _f = fieldProps.menuItemProps, menuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.inputLabelProps, inputLabelProps = _g === void 0 ? {} : _g, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
     var labelId = fieldConfig.id + "_label";
     var fieldError = getFieldError(fieldProps.name || "", formikProps);
-    var error = !!fieldError;
     var emptyItemText = isString(emptyItem) ? emptyItem : "None";
     var menuOptions = getMenuOptions(options);
     var value = get(formikProps, "values." + fieldProps.name) ||
@@ -192,10 +191,10 @@ var MUISelectField = function (props) {
         if (emptyItem)
             optionsList.unshift(createElement(MenuItem, __assign({ value: "" }, emptyMenuItemProps), emptyItemText));
     }
-    return (createElement(FormControl, __assign({ error: error }, formControlProps),
-        label && (createElement(InputLabel, __assign({ id: labelId }, inputLabelProps), label)),
+    return (createElement(FormControl, __assign({ error: !!fieldError }, formControlProps),
+        label && (createElement(InputLabel, __assign({ error: !!fieldError, id: labelId }, inputLabelProps), label)),
         createElement(Select, __assign({ labelId: labelId, id: fieldConfig.id, value: value, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, selectProps), optionsList),
-        (error) && (createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError))));
+        createElement(FormHelperText, __assign({}, formHelperTextProps, { error: !!fieldError }), fieldError || helperText)));
 };
 
 var MUICheckBox = function (props) {
