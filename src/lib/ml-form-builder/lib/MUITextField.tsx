@@ -1,6 +1,6 @@
 import { TextFieldProps, makeStyles, Theme, createStyles, TextField } from "@material-ui/core";
 import clsx from "clsx";
-import { FormikValues } from "formik";
+import { FormikProps } from "formik";
 import { get } from "lodash";
 import React from "react";
 import { MUIReadOnly } from ".";
@@ -14,7 +14,7 @@ export interface IProps extends IFieldProps {
 export const MUITextField: React.FC<IProps> = (props) => {
 	const {
 		fieldProps = {} as TextFieldProps,
-		formikProps = {} as FormikValues,
+		formikProps = {} as FormikProps<any>,
 		isReadOnly = false,
 	} = props;
 
@@ -27,11 +27,12 @@ export const MUITextField: React.FC<IProps> = (props) => {
 		helperText: fieldError || fieldProps.helperText || "",
 		onChange: formikProps.handleChange,
 		onBlur: formikProps.handleBlur,
-		value: get(formikProps, `values.${fieldProps.name}`) || "",
+		value: getFieldValue(formikProps, fieldProps.name || ''),
 		className: clsx(fieldProps.className, {
 			[classes.numberInput]: fieldProps.type === "number",
 		}),
 	};
+	console.log({ updatedProps });
 	if (isReadOnly) {
 		return (
 			<MUIReadOnly label={updatedProps.label} value={updatedProps.value} />
@@ -59,3 +60,10 @@ const useStyles = makeStyles<Theme>(() =>
 		},
 	})
 );
+
+const getFieldValue = (formikProps: FormikProps<any>, name: string) => {
+	let value = get(formikProps, `values.${name}`);
+	if (value === null || value === undefined || value === false)
+		return '';
+	return value;
+};

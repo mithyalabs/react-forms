@@ -137,9 +137,10 @@ var MUITextField = function (props) {
     var _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b, _c = props.formikProps, formikProps = _c === void 0 ? {} : _c, _d = props.isReadOnly, isReadOnly = _d === void 0 ? false : _d;
     var classes = useStyles();
     var fieldError = getFieldError(fieldProps.name || "", formikProps);
-    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || "", onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: get(formikProps, "values." + fieldProps.name) || "", className: clsx(fieldProps.className, (_a = {},
+    var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || "", onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: getFieldValue(formikProps, fieldProps.name || ''), className: clsx(fieldProps.className, (_a = {},
             _a[classes.numberInput] = fieldProps.type === "number",
             _a)) });
+    console.log({ updatedProps: updatedProps });
     if (isReadOnly) {
         return (React__default.createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
@@ -162,6 +163,12 @@ var useStyles = makeStyles$1(function () {
         },
     });
 });
+var getFieldValue = function (formikProps, name) {
+    var value = get(formikProps, "values." + name);
+    if (value === null || value === undefined || value === false)
+        return '';
+    return value;
+};
 
 var MUISelectField = function (props) {
     var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
