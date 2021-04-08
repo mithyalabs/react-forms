@@ -20,7 +20,6 @@ import { getFieldError } from "../Utils";
 import { COUNTRY_LIST } from "./Constants";
 
 
-
 export interface IMUIPhoneFieldProps {
 	name?: string;
 	countryCodeProps?: SelectProps;
@@ -85,7 +84,7 @@ export const MUIPhoneField: FC<MUIPhoneFieldProps> = (props) => {
 			<Box width="100%" display="flex" alignItems="flex-end">
 				<Box width="30%" {...countryCodeContainerProps}>
 					<FormControl fullWidth {...countryCodeFormControlProps} error={error}>
-						<InputLabel id={fieldProps.name}>
+						<InputLabel id={fieldProps.name} shrink>
 							{countryCodeLabel || "Country code"}
 						</InputLabel>
 						<Select
@@ -150,9 +149,6 @@ const useStyles = makeStyles<Theme>(() => {
 			fontWeight: "bold",
 			textTransform: "none",
 		},
-		tf: {
-
-		}
 	});
 });
 

@@ -5800,7 +5800,7 @@ var MUIPhoneField = function (props) {
         React__default.createElement(Box, { width: "100%", display: "flex", alignItems: "flex-end" },
             React__default.createElement(Box, __assign({ width: "30%" }, countryCodeContainerProps),
                 React__default.createElement(FormControl, __assign({ fullWidth: true }, countryCodeFormControlProps, { error: error }),
-                    React__default.createElement(InputLabel, { id: fieldProps.name }, countryCodeLabel || "Country code"),
+                    React__default.createElement(InputLabel, { id: fieldProps.name, shrink: true }, countryCodeLabel || "Country code"),
                     React__default.createElement(Select, __assign({ labelId: fieldProps.name, value: code, onChange: codeChange }, countryCodeProps, { native: true }),
                         React__default.createElement("option", { value: '' }, emptyItemText || 'Select the country code'),
                         COUNTRY_LIST.map(function (country, index) {
@@ -5822,7 +5822,6 @@ var useStyles$3 = makeStyles(function () {
             fontWeight: "bold",
             textTransform: "none",
         },
-        tf: {}
     });
 });
 
