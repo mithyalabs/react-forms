@@ -11,15 +11,11 @@ import {
 	MenuItemProps,
 	InputLabelProps,
 } from "@material-ui/core";
-import { IFieldProps, FormConfig } from "../index";
 import { FormikValues } from "formik";
 import { get, map, isString } from "lodash";
-import {
-	MenuOptions,
-	MenuOptionObject,
-	getMenuOptions,
-	getFieldError,
-} from "../Utils";
+import { IFieldProps, FormConfig } from "..";
+import { MenuOptions, getFieldError, getMenuOptions, MenuOptionObject } from "../Utils";
+
 
 
 export interface IMUISelectProps extends SelectProps {
@@ -73,7 +69,6 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
 					const { name, value, ...rest } = item;
 					return (
 						<option
-
 							key={`${fieldConfig.id}_menu_item_${index}`}
 							value={value}
 							{...menuItemProps}
@@ -90,7 +85,6 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
 				<option
 					key={`${fieldConfig.id}_menu_item_default_option`}
 					value=""
-					selected
 					{...emptyMenuItemProps}
 				>
 					{emptyItemText}
