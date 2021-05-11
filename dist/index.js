@@ -5831,11 +5831,12 @@ var attachField = function (type, component, props) {
         ComponentMapConfig[type] = { component: component, props: props };
 };
 var setDefaultProps = function (type, props) {
+    var _a, _b;
     if (lodash.isArray(type)) {
         lodash.map(type, function (item) { return ComponentMapConfig[item].props = __assign(__assign({}, ComponentMapConfig[item].props), props); });
     }
-    else
-        ComponentMapConfig[type].props = __assign(__assign({}, ComponentMapConfig[type].props), props);
+    else if ((_a = ComponentMapConfig[type]) === null || _a === void 0 ? void 0 : _a.props)
+        ComponentMapConfig[type].props = __assign(__assign({}, (_b = ComponentMapConfig[type]) === null || _b === void 0 ? void 0 : _b.props), props);
 };
 attachField('text', React.createElement(MUITextField, null), { type: 'text' });
 attachField('password', React.createElement(MUITextField, null), { type: 'password' });
@@ -5940,10 +5941,10 @@ var useFormStyles = styles.makeStyles(function () {
     }));
 });
 
-var ReactForm = function (props) {
-    var config = props.config, formId = props.formId, _a = props.initialValues, initialValues = _a === void 0 ? {} : _a, onSubmit = props.onSubmit, actionConfig = props.actionConfig, formSettings = props.formSettings, _b = props.isInProgress, isInProgress = _b === void 0 ? false : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c, formikProps = __rest(props, ["config", "formId", "initialValues", "onSubmit", "actionConfig", "formSettings", "isInProgress", "isReadOnly"]);
-    return (React.createElement(formik.Formik, __assign({ initialValues: initialValues, onSubmit: onSubmit }, formikProps), function (formProps) { return (React.createElement(MLFormBuilder, { schema: config, formId: formId, actionConfig: actionConfig, settings: __assign(__assign({}, formSettings), { isReadOnly: isReadOnly }), formikProps: formProps, isInProgress: isInProgress })); }));
-};
+function ReactForm(props) {
+    var config = props.config, innerRef = props.innerRef, formId = props.formId, _a = props.initialValues, initialValues = _a === void 0 ? {} : _a, onSubmit = props.onSubmit, actionConfig = props.actionConfig, formSettings = props.formSettings, _b = props.isInProgress, isInProgress = _b === void 0 ? false : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c, formikProps = __rest(props, ["config", "innerRef", "formId", "initialValues", "onSubmit", "actionConfig", "formSettings", "isInProgress", "isReadOnly"]);
+    return (React.createElement(formik.Formik, __assign({ innerRef: innerRef, initialValues: initialValues, onSubmit: onSubmit }, formikProps), function (formProps) { return (React.createElement(MLFormBuilder, { schema: config, formId: formId, actionConfig: actionConfig, settings: __assign(__assign({}, formSettings), { isReadOnly: isReadOnly }), formikProps: formProps, isInProgress: isInProgress })); }));
+}
 
 var index$1 = './lib/ReactForm';
 

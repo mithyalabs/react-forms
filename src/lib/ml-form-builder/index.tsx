@@ -87,8 +87,8 @@ export const attachField = (type: Array<string> | string, component: JSX.Element
 export const setDefaultProps = (type: Array<string> | string, props: object) => {
     if (isArray(type)) {
         map(type, item => ComponentMapConfig[item].props = { ...ComponentMapConfig[item].props, ...props })
-    } else
-        ComponentMapConfig[type]?.props = { ...ComponentMapConfig[type]?.props, ...props }
+    } else if (ComponentMapConfig[type]?.props)
+        ComponentMapConfig[type].props = { ...ComponentMapConfig[type]?.props, ...props }
 }
 
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MLFormBuilder, RowSchema, IFormActionProps, BuilderSettingsProps } from './ml-form-builder';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikConfig, FormikValues } from 'formik';
 export * from './ml-form-builder';
 export * from './ml-form-builder/lib';
 export * from './ml-form-builder/Utils'
@@ -36,19 +36,21 @@ export * from './ml-form-builder/Utils'
  */
 
 
-export interface IReactFormProps extends FormikValues {
+export interface IReactFormProps<T = any> extends FormikValues {
     config: Array<RowSchema>,
     formId: string,
+    innerRef?: FormikConfig<T>['innerRef']
     actionConfig: IFormActionProps
     formSettings?: BuilderSettingsProps
     isInProgress?: boolean
     isReadOnly?: boolean
 }
-export const ReactForm: React.FC<IReactFormProps> = (props) => {
-    const { config, formId, initialValues = {}, onSubmit, actionConfig, formSettings, isInProgress = false, isReadOnly = false, ...formikProps } = props;
+export function ReactForm<T>(props: IReactFormProps<T>) {
+    const { config, innerRef, formId, initialValues = {}, onSubmit, actionConfig, formSettings, isInProgress = false, isReadOnly = false, ...formikProps } = props;
 
     return (
-        <Formik
+        <Formik<T>
+            innerRef={innerRef}
             initialValues={initialValues}
             onSubmit={onSubmit}
             {...formikProps}
