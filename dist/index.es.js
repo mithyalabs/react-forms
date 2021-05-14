@@ -140,7 +140,6 @@ var MUITextField = function (props) {
     var updatedProps = __assign(__assign({}, fieldProps), { error: !!fieldError, helperText: fieldError || fieldProps.helperText || "", onChange: formikProps.handleChange, onBlur: formikProps.handleBlur, value: getFieldValue(formikProps, fieldProps.name || ''), className: clsx(fieldProps.className, (_a = {},
             _a[classes.numberInput] = fieldProps.type === "number",
             _a)) });
-    console.log({ updatedProps: updatedProps });
     if (isReadOnly) {
         return (React__default.createElement(MUIReadOnly, { label: updatedProps.label, value: updatedProps.value }));
     }
@@ -187,7 +186,7 @@ var MUISelectField = function (props) {
                 return (createElement("option", __assign({ key: fieldConfig.id + "_menu_item_" + index, value: value }, menuItemProps, rest), name));
             });
         if (emptyItem)
-            optionsList.unshift(createElement("option", __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "", selected: true }, emptyMenuItemProps), emptyItemText));
+            optionsList.unshift(createElement("option", __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "" }, emptyMenuItemProps), emptyItemText));
     }
     else {
         if (menuOptions)
@@ -196,7 +195,7 @@ var MUISelectField = function (props) {
                 return (createElement(MenuItem, __assign({ key: fieldConfig.id + "_menu_item_" + index, value: value }, menuItemProps, rest), name));
             });
         if (emptyItem)
-            optionsList.unshift(createElement(MenuItem, __assign({ value: "" }, emptyMenuItemProps), emptyItemText));
+            optionsList.unshift(createElement(MenuItem, __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "" }, emptyMenuItemProps), emptyItemText));
     }
     return (createElement(FormControl, __assign({ error: !!fieldError }, formControlProps),
         label && (createElement(InputLabel, __assign({ error: !!fieldError, id: labelId }, inputLabelProps), label)),
