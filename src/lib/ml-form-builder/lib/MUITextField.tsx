@@ -32,7 +32,7 @@ export const MUITextField: React.FC<IProps> = (props) => {
 			[classes.numberInput]: fieldProps.type === "number",
 		}),
 	};
-	console.log({ updatedProps });
+
 	if (isReadOnly) {
 		return (
 			<MUIReadOnly label={updatedProps.label} value={updatedProps.value} />

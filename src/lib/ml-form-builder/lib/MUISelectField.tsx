@@ -111,7 +111,7 @@ export const MUISelectField: React.FC<ISelectProps> = (props) => {
 
 		if (emptyItem)
 			optionsList.unshift(
-				<MenuItem value="" {...emptyMenuItemProps}>
+				<MenuItem key={`${fieldConfig.id}_menu_item_default_option`} value="" {...emptyMenuItemProps}>
 					{emptyItemText}
 				</MenuItem>
 			);
