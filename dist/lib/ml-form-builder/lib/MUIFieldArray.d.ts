@@ -11,6 +11,8 @@ interface IFieldArrayProps {
     removeButton?: JSX.Element;
     removeButtonProps?: IconButtonProps;
     textFieldProps?: TextFieldProps;
+    onAddButtonClick?: () => Promise<any | undefined>;
+    onRemoveButtonClick?: (index: number) => Promise<boolean>;
 }
 export interface IFieldsArrayProps extends IFieldProps {
     fieldProps?: IFieldArrayProps;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IFieldProps } from '../index';
-import { FieldArray, FormikValues } from 'formik';
+import { FieldArray, FieldArrayRenderProps, FormikValues } from 'formik';
 import { get } from 'lodash';
 import { IconButton, Button, ButtonProps, IconButtonProps, TextFieldProps } from '@material-ui/core';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
@@ -17,6 +17,8 @@ interface IFieldArrayProps {
     removeButton?: JSX.Element
     removeButtonProps?: IconButtonProps
     textFieldProps?: TextFieldProps
+    onAddButtonClick?: () => Promise<any|undefined>
+    onRemoveButtonClick?: (index: number) => Promise<boolean>
 }
 export interface IFieldsArrayProps extends IFieldProps {
     fieldProps?: IFieldArrayProps
@@ -41,10 +43,29 @@ export interface IFieldsArrayProps extends IFieldProps {
 
 export const MUIFieldArray: React.FC<IFieldsArrayProps> = (props) => {
     const { formikProps = {} as FormikValues, fieldProps = {} as IFieldArrayProps } = props;
-    const { itemType, addButtonText = 'Add', addButtonProps, addButton, removeButton, removeButtonProps, textFieldProps = {} } = fieldProps;
+    const { itemType, addButtonText = 'Add', addButtonProps, addButton, removeButton, removeButtonProps, textFieldProps = {},onAddButtonClick,onRemoveButtonClick } = fieldProps;
     const values = get(formikProps, `values.${fieldProps.name}`);
     const itemComponentConfig = getComponentConfig(itemType);
     const classes = useStyles();
+    const handleElementAdd = async(arrayHelpers:FieldArrayRenderProps) => {
+        if(!onAddButtonClick){
+            arrayHelpers.push({});
+            return;
+        }
+       const res =  await onAddButtonClick();
+       if(res){
+           arrayHelpers.push(res??{});
+       }
+    }
+    const handleElementRemove = async (arrayHelpers: FieldArrayRenderProps,index:number) => {
+        if(!onRemoveButtonClick){
+            arrayHelpers.remove(index);
+            return;
+        }
+        const isRemoved = await onRemoveButtonClick(index);
+        if(isRemoved)
+            arrayHelpers.remove(index);
+    }
     return (
         <FieldArray name={fieldProps.name}
             render={arrayHelpers => (
@@ -55,7 +76,7 @@ export const MUIFieldArray: React.FC<IFieldsArrayProps> = (props) => {
                                 {React.cloneElement(itemComponentConfig.component, { name: fieldProps.name, itemIndex: index, arrayHelpers, fieldValue: value, formikProps, ...itemComponentConfig.props, ...textFieldProps })}
                                 {
                                     (removeButton) ? removeButton : (
-                                        <IconButton className={classes.arrayRemoveIcon} size="small" onClick={() => arrayHelpers.remove(index)} {...removeButtonProps}><CloseIcon /></IconButton>
+                                        <IconButton className={classes.arrayRemoveIcon} size="small" onClick={() => handleElementRemove(arrayHelpers,index)} {...removeButtonProps}><CloseIcon /></IconButton>
                                     )
                                 }
 
@@ -63,7 +84,7 @@ export const MUIFieldArray: React.FC<IFieldsArrayProps> = (props) => {
                         ))
                     }
                     {
-                        (addButton) ? addButton : (<Button type="button" onClick={() => arrayHelpers.push({})} {...addButtonProps}>{addButtonText}</Button>)
+                        (addButton) ? addButton : (<Button type="button" onClick={() => handleElementAdd(arrayHelpers)} {...addButtonProps}>{addButtonText}</Button>)
                     }
 
                 </div>
