@@ -18,7 +18,7 @@ It uses basic [material-ui](https://www.npmjs.com/package/@material-ui/core) lib
 
 ## 1.1. Installation
 
-    npm i react-forms
+    npm i https://github.com/mithyalabs/react-forms.git
 
 ## 1.2. Getting started with react-forms
 
