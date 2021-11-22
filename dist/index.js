@@ -215,14 +215,13 @@ var getFieldValue = function (formikProps, name) {
 };
 
 var MUISelectField = function (props) {
-    var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c;
-    var label = fieldProps.label, _d = fieldProps.options, options = _d === void 0 ? [] : _d, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _e = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _e === void 0 ? {} : _e, _f = fieldProps.menuItemProps, menuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.inputLabelProps, inputLabelProps = _g === void 0 ? {} : _g, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
+    var _a = props.fieldConfig, fieldConfig = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.fieldProps, fieldProps = _c === void 0 ? {} : _c, _d = props.isReadOnly, isReadOnly = _d === void 0 ? false : _d;
+    var label = fieldProps.label, _e = fieldProps.options, options = _e === void 0 ? [] : _e, emptyItem = fieldProps.emptyItem, helperText = fieldProps.helperText, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps, _f = fieldProps.emptyMenuItemProps, emptyMenuItemProps = _f === void 0 ? {} : _f, _g = fieldProps.menuItemProps, menuItemProps = _g === void 0 ? {} : _g, _h = fieldProps.inputLabelProps, inputLabelProps = _h === void 0 ? {} : _h, selectProps = __rest(fieldProps, ["label", "options", "emptyItem", "helperText", "formControlProps", "formHelperTextProps", "emptyMenuItemProps", "menuItemProps", "inputLabelProps"]);
     var labelId = fieldConfig.id + "_label";
-    var fieldError = getFieldError(fieldProps.name || "", formikProps);
-    var emptyItemText = lodash.isString(emptyItem) ? emptyItem : "None";
+    var fieldError = getFieldError(fieldProps.name || '', formikProps);
+    var emptyItemText = lodash.isString(emptyItem) ? emptyItem : 'None';
     var menuOptions = getMenuOptions(options);
-    var value = lodash.get(formikProps, "values." + fieldProps.name) ||
-        (selectProps.multiple ? [] : "");
+    var value = lodash.get(formikProps, "values." + fieldProps.name) || (selectProps.multiple ? [] : '');
     var optionsList = [];
     if (selectProps.native) {
         if (menuOptions)
@@ -241,6 +240,9 @@ var MUISelectField = function (props) {
             });
         if (emptyItem)
             optionsList.unshift(React.createElement(core.MenuItem, __assign({ key: fieldConfig.id + "_menu_item_default_option", value: "" }, emptyMenuItemProps), emptyItemText));
+    }
+    if (isReadOnly) {
+        return React.createElement(MUIReadOnly, { label: label, value: value });
     }
     return (React.createElement(core.FormControl, __assign({ error: !!fieldError }, formControlProps),
         label && (React.createElement(core.InputLabel, __assign({ error: !!fieldError, id: labelId }, inputLabelProps), label)),
