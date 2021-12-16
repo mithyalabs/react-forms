@@ -272,20 +272,18 @@ var MUISwitch = function (props) {
 };
 
 var MUIRadio = function (props) {
-    var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b;
-    var header = fieldProps.header, _c = fieldProps.options, options = _c === void 0 ? [] : _c, headerProps = fieldProps.headerProps, helperText = fieldProps.helperText, radioProps = fieldProps.radioProps, radioGroupProps = fieldProps.radioGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps;
+    var _a = props.fieldProps, fieldProps = _a === void 0 ? {} : _a, _b = props.formikProps, formikProps = _b === void 0 ? {} : _b, _c = props.isReadOnly, isReadOnly = _c === void 0 ? false : _c;
+    var header = fieldProps.header, _d = fieldProps.options, options = _d === void 0 ? [] : _d, headerProps = fieldProps.headerProps, helperText = fieldProps.helperText, radioProps = fieldProps.radioProps, radioGroupProps = fieldProps.radioGroupProps, formControlProps = fieldProps.formControlProps, formHelperTextProps = fieldProps.formHelperTextProps;
     var fieldValue = get(formikProps, "values." + fieldProps.name) || '';
     var menuOptions = getMenuOptions(options);
-    var fieldError = getFieldError((fieldProps.name || ''), formikProps);
-    return (createElement(FormControl, __assign({ error: !!fieldError }, formControlProps),
-        (header) &&
-            (createElement(FormLabel, __assign({}, headerProps), header)),
+    var fieldError = getFieldError(fieldProps.name || '', formikProps);
+    return (createElement(FormControl, __assign({ error: !!fieldError }, formControlProps, { disabled: (formControlProps === null || formControlProps === void 0 ? void 0 : formControlProps.disabled) || isReadOnly }),
+        header && createElement(FormLabel, __assign({}, headerProps), header),
         createElement(RadioGroup, __assign({ name: fieldProps.name, value: fieldValue, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, radioGroupProps), map(menuOptions, function (option, index) {
             var value = option.value, name = option.name, control = option.control, rest = __rest(option, ["value", "name", "control"]);
-            return (createElement(FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', label: name, control: control !== null && control !== void 0 ? control : createElement(Radio, __assign({}, radioProps)) }, rest)));
+            return (createElement(FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', control: control !== null && control !== void 0 ? control : createElement(Radio, __assign({}, radioProps)) }, rest, { label: name })));
         })),
-        (fieldError || helperText) &&
-            (createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText))));
+        (fieldError || helperText) && createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText)));
 };
 
 /* interface IArrayItemProps extends TextFieldProps {
