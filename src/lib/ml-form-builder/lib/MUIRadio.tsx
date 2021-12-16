@@ -59,8 +59,8 @@ export const MUIRadio: React.FC<IProps> = (props) => {
                             key={`${fieldProps.id}_option_item_${index}`}
                             value={value + ''}
                             control={control ?? <Radio {...radioProps} />}
-                            {...rest}
                             label={name}
+                            {...rest}
                         />
                     );
                 })}

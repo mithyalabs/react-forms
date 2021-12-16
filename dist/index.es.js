@@ -281,7 +281,7 @@ var MUIRadio = function (props) {
         header && createElement(FormLabel, __assign({}, headerProps), header),
         createElement(RadioGroup, __assign({ name: fieldProps.name, value: fieldValue, onChange: formikProps.handleChange, onBlur: formikProps.handleBlur }, radioGroupProps), map(menuOptions, function (option, index) {
             var value = option.value, name = option.name, control = option.control, rest = __rest(option, ["value", "name", "control"]);
-            return (createElement(FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', control: control !== null && control !== void 0 ? control : createElement(Radio, __assign({}, radioProps)) }, rest, { label: name })));
+            return (createElement(FormControlLabel, __assign({ key: fieldProps.id + "_option_item_" + index, value: value + '', control: control !== null && control !== void 0 ? control : createElement(Radio, __assign({}, radioProps)), label: name }, rest)));
         })),
         (fieldError || helperText) && createElement(FormHelperText, __assign({}, formHelperTextProps), fieldError || helperText)));
 };
