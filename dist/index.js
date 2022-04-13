@@ -6021,7 +6021,7 @@ var BuildFormRow = function (props) {
             : [schema];
     var classes = useFormStyles();
     var rowStyle = { marginBottom: rowSettings.verticalSpacing || 10 };
-    return (React.createElement("div", { className: classes.row }, lodash.map(colItems, function (item, index) {
+    return (React.createElement("div", { className: classes.row, style: rowStyle }, lodash.map(colItems, function (item, index) {
         var componentConfig = ComponentMapConfig[item.type];
         var horizontalSpacing = index === colItems.length - 1
             ? 0
@@ -6033,7 +6033,7 @@ var BuildFormRow = function (props) {
         var Component = componentConfig.component;
         if (conditionalProps.hidden === true)
             return React.createElement("div", { key: rowId + "_field_" + index });
-        return (React.createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign(__assign({ flex: item.flex || 1, marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding, maxWidth: "100%" }, rowStyle), item.styles) }, settings.isReadOnly &&
+        return (React.createElement("div", { key: rowId + "_field_" + index, className: clsx(item.classNames, classes.column), style: __assign({ flex: item.flex || 1, marginRight: horizontalSpacing, paddingLeft: rowSettings.columnHorizontalPadding, paddingRight: rowSettings.columnHorizontalPadding, maxWidth: "100%" }, item.styles) }, settings.isReadOnly &&
             item.readOnlyProps &&
             lodash.isFunction(item.readOnlyProps.renderer)
             ? item.readOnlyProps.renderer({

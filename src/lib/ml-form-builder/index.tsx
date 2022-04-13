@@ -159,7 +159,7 @@ export const BuildFormRow: React.FC<FormRowProps> = (props) => {
   const classes = useFormStyles();
   const rowStyle = { marginBottom: rowSettings.verticalSpacing || 10 };
   return (
-    <div className={classes.row}>
+    <div className={classes.row} style={rowStyle}>
       {map(colItems, (item: FormConfig, index) => {
         const componentConfig = ComponentMapConfig[item.type];
         const horizontalSpacing =
@@ -190,7 +190,6 @@ export const BuildFormRow: React.FC<FormRowProps> = (props) => {
               paddingLeft: rowSettings.columnHorizontalPadding,
               paddingRight: rowSettings.columnHorizontalPadding,
               maxWidth: "100%",
-              ...rowStyle,
               ...item.styles,
             }}
           >
