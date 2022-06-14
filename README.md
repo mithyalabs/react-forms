@@ -81,12 +81,12 @@ Each item represents a row , so if the item contains single object then there wi
 
 ### 1.5.1 TextField    
 ```js
-	{
-		type : 'text',
-		valueKey: 'myText',
-		fieldProps : { ...textFieldProps },
-		styles : { margin : '0 auto'}
-	}
+{
+	type : 'text',
+	valueKey: 'myText',
+	fieldProps : { ...textFieldProps },
+	styles : { margin : '0 auto'}
+}
 ```
 > textFieldProps = [TextFieldProps](https://material-ui.com/api/text-field/)
 
@@ -94,39 +94,39 @@ Each item represents a row , so if the item contains single object then there wi
 
 ### 1.5.2 SelectField
 ```js
-    {
-    	type : 'select',
-    	valueKey: 'mySelect',
-    	fieldProps : {
-    		...selectProps
-    		options :[
-				{name : 'Abc' , value : 'abc'}, 
-				{name : 'XYZ' , value : 'xyz'}
-			] 
-		},
-		styles : { width : '50%' }
-    }
+{
+	type : 'select',
+	valueKey: 'mySelect',
+	fieldProps : {
+		...selectProps
+		options :[
+			{name : 'Abc' , value : 'abc'}, 
+			{name : 'XYZ' , value : 'xyz'}
+		] 
+	},
+	styles : { width : '50%' }
+}
 ```
 > selectProps = [SelectProps](https://material-ui.com/api/select/)
 
 
 ### 1.5.3 Checkbox
 ```js
-	{ 
-	    type : 'checkbox'
-	    valueKey: 'myCheckbox',
-	    fieldProps : { 
-		    ...checkboxProps , 
-		    options :[
-				{name : 'Abc' , value : 'abc'}, 
-				{name : 'XYZ' , value : 'xyz'}
-			] ,
-		    header : 'My Checkbox Header',
-		    formControlLabelProps : formControlLabelProps,
-		    formControlProps : formControlProps,
-		    formHelperTextProps : formHelperTextProps
-		}
+{ 
+	type : 'checkbox'
+	valueKey: 'myCheckbox',
+	fieldProps : { 
+		...checkboxProps , 
+		options :[
+			{name : 'Abc' , value : 'abc'}, 
+			{name : 'XYZ' , value : 'xyz'}
+		] ,
+		header : 'My Checkbox Header',
+		formControlLabelProps : formControlLabelProps,
+		formControlProps : formControlProps,
+		formHelperTextProps : formHelperTextProps
 	}
+}
 ```
 > `Options` can be an Array of string or Array of {name , value} object. This structure is followed by SelectField , Checkbox and Radiobutton.
 
@@ -138,68 +138,68 @@ Each item represents a row , so if the item contains single object then there wi
 
 ### 1.5.4 Radio Button
 ```js
-	{
-	    type : 'radio',
-	    valueKey : 'myRadio',
-		    fieldProps : {
-				...radioProps ,
-				options :[
-					{name : 'Abc' , value : 'abc'}, 
-					{name : 'XYZ' , value : 'xyz'}
-				],
-				formControlProps : formControlProps,
-				formHelperTextProps : formHelperTextProps
-			}
-	}
+{
+	type : 'radio',
+	valueKey : 'myRadio',
+		fieldProps : {
+			...radioProps ,
+			options :[
+				{name : 'Abc' , value : 'abc'}, 
+				{name : 'XYZ' , value : 'xyz'}
+			],
+			formControlProps : formControlProps,
+			formHelperTextProps : formHelperTextProps
+		}
+}
 ```
 > radioProps : [RadioButtonProps](https://material-ui.com/api/radio/)
 
 
 ### 1.5.5 Switch
 ```js
-	{
-	    type : 'switch' , 
-	    valueKey : 'mySwitch',
-	    fieldProps : { 
-			label: 'Demo Switch',
-			...switchProps
-		}
+{
+	type : 'switch' , 
+	valueKey : 'mySwitch',
+	fieldProps : { 
+		label: 'Demo Switch',
+		...switchProps
 	}
+}
 ``` 
 > switchProps: [SwitchProps](https://material-ui.com/api/switch/)
 
 ### 1.5.6 Password
 ```js
-	{
-		type : 'password' ,
-		valueKey : 'myPasswordField',	  
-		fieldProps :{
-			label : 'Enter password',
-			...textFieldProps
-		}
+{
+	type : 'password' ,
+	valueKey : 'myPasswordField',	  
+	fieldProps :{
+		label : 'Enter password',
+		...textFieldProps
 	}
+}
 ```
 
 
 ### 1.5.7 File
 ```ts
-	{
-		type: 'file',
-		valueKey: 'myFile',
-		fieldProps:{
-			readAs?: 'readAsBinaryString' | 'readAsDataURL' | 'readAsArrayBuffer' | 'readAsText',
-			encoding?: string,
-			disabled?: boolean,
-			multiple?: boolean,
-			accept?: string,
-			disableDefaultTooltip?: boolean,
-			invisible?: boolean,
-			onFilesChange?: (files: FileList) => void,
-			onDone?: (imgFiles: TFile[], remFiles?: File[]) => void,
-			wrapWith?: (input: JSX.Element) => JSX.Element,
-			nativeInputProps?: React.InputHTMLAttributes<{}>,
-		}
+{
+	type: 'file',
+	valueKey: 'myFile',
+	fieldProps:{
+		readAs?: 'readAsBinaryString' | 'readAsDataURL' | 'readAsArrayBuffer' | 'readAsText',
+		encoding?: string,
+		disabled?: boolean,
+		multiple?: boolean,
+		accept?: string,
+		disableDefaultTooltip?: boolean,
+		invisible?: boolean,
+		onFilesChange?: (files: FileList) => void,
+		onDone?: (imgFiles: TFile[], remFiles?: File[]) => void,
+		wrapWith?: (input: JSX.Element) => JSX.Element,
+		nativeInputProps?: React.InputHTMLAttributes<{}>,
 	}
+}
 ```
 
 
@@ -214,16 +214,16 @@ Each item represents a row , so if the item contains single object then there wi
 ### 1.5.8 Plain Text
 This simply displays a bit of text formatted as required. This is useful if you're creating some consent form and want to display some text. Sure there are other ways to do the same, but if you need to, you can use this too.
 ```js
-	{
-		type: 'mui-plain-text',
-		valueKey: 'doNotIgnoreThisProperty',
-		fieldProps:{ 
-			isTextHtmlString?: false,
-  			text: "Please read all the terms of this agreement."
-  			typographyProps?: TypographyProps,
-  			className?: 'my-formatted-text',
-		}
+{
+	type: 'mui-plain-text',
+	valueKey: 'doNotIgnoreThisProperty',
+	fieldProps:{ 
+		isTextHtmlString?: false,
+		text: "Please read all the terms of this agreement."
+		typographyProps?: TypographyProps,
+		className?: 'my-formatted-text',
 	}
+}
 ```
 
 **Notes :**
@@ -237,8 +237,8 @@ You can set your own default props for a specific field that would be used all o
 
 **Example :**
 ```js
-    import { setDefaultProps } from 'react-forms';
-	setDefaultProps('text' , {fullWidth : true , color : 'secondary'})
+import { setDefaultProps } from 'react-forms';
+setDefaultProps('text' , {fullWidth : true , color : 'secondary'})
 ```
 
 Now this props would be default properties followed throughout the application.
@@ -247,14 +247,14 @@ And of course if you don't want to use them somewhere then you can pass your own
 ## 1.7. Add your own Component
 If you want to create your own custom component then we have provided a attachField property for you.
 ```js
-    import {react , FC} from 'react'
-    import  {attachField} from 'react-forms'
+import {react , FC} from 'react'
+import  {attachField} from 'react-forms'
 
-    const YourComponent:FC<> = () =>{
-		return <div/>
-	}
+const YourComponent = () => {
+	return <div/>
+}
 
-	attachField('your-component',<YourComponent/> ,{default-props})
+attachField('your-component',<YourComponent/> ,{default-props})
 ```
 
 ## 1.8. Adding Condition to form field.
@@ -262,41 +262,41 @@ If you want to create your own custom component then we have provided a attachFi
 Just imagine if you want to make a component behave differently based on the state of another component. Well it is possible by passing condition props to the config file. 
 *Check this example on sandbox*
 ```js
-    const config = [
-		{
-			type : 'text' ,
-			valueKey : 'myText'
+const config = [
+	{
+		type : 'text' ,
+		valueKey : 'myText'
+	},
+	{
+		type "text",
+		valueKey : 'myText2'
+	},
+	{
+		type : 'radio' ,
+		valueKey : 'myRadio',
+		fieldProps :{
+			options : ['option1' , 'option2']
 		},
-		{
-			type "text",
-			valueKey : 'myText2'
-		},
-		{
-			type : 'radio' ,
-			valueKey : 'myRadio',
-			fieldProps :{
-				options : ['option1' , 'option2']
-			},
-			condition : {
-				hidden : true ,
-				defaultProps : { same as fieldProps} ,
-				truthyProps : { same as fieldProps} ,
-				logicOpn : 'AND' | 'OR',
-				values : [
-					{
-						key : 'myText',
-						compareValue : 30 ,
-						operator : '==='
-					},
-					{
-						key : 'myText2',
-						compareValue : 'abc' ,
-						operator : '!=='
-					}
-				]
-			}
+		condition : {
+			hidden : true ,
+			defaultProps : { same as fieldProps} ,
+			truthyProps : { same as fieldProps} ,
+			logicOpn : 'AND' | 'OR',
+			values : [
+				{
+					key : 'myText',
+					compareValue : 30 ,
+					operator : '==='
+				},
+				{
+					key : 'myText2',
+					compareValue : 'abc' ,
+					operator : '!=='
+				}
+			]
 		}
-	]
+	}
+]
 ```
 
 **Note**
@@ -316,48 +316,48 @@ We use [YUP](https://www.npmjs.com/package/yup) library for all kind of field va
 
 Example : 
 ```js
-    import * as YUP from 'yup'
-    import { ReactForm } from 'react-forms'
-    const formValidation = Yup.object({
-	    offerType: Yup.string().required('Select at least 1 offer'),
-	    myText: Yup.number().max(50)
-	})
-	
-	const config = [
-		{
-			type : 'text',
-			value : 'myText'
-		},
-		{
-			type: 'radio',
-			valueKey: 'offerType',
-			fieldProps: {
-				options: [
-					{
-						name: 'Offer1',
-						value: 1
-					}, 
-					{
-						name: 'Offer2',
-						value: 2
-					}
-				],
-				header: 'My Offers',
-			}
+import * as YUP from 'yup'
+import { ReactForm } from 'react-forms'
+const formValidation = Yup.object({
+	offerType: Yup.string().required('Select at least 1 offer'),
+	myText: Yup.number().max(50)
+})
+
+const config = [
+	{
+		type : 'text',
+		value : 'myText'
+	},
+	{
+		type: 'radio',
+		valueKey: 'offerType',
+		fieldProps: {
+			options: [
+				{
+					name: 'Offer1',
+					value: 1
+				}, 
+				{
+					name: 'Offer2',
+					value: 2
+				}
+			],
+			header: 'My Offers',
 		}
-	]
-	   
-	export default const Example = () => {
-		return (
-			<div>
-				<ReactForm
-					config={config}
-					validationSchema={formValidation}
-					onSubmit={(values)=>{console.log(values)} 
-				/>
-			</div>
-		)
 	}
+]
+	
+export default const Example = () => {
+	return (
+		<div>
+			<ReactForm
+				config={config}
+				validationSchema={formValidation}
+				onSubmit={(values)=>{console.log(values)} 
+			/>
+		</div>
+	)
+}
 ```
 
 Once you hit the submit button it will perform validation as per the validation schema.
@@ -366,10 +366,10 @@ Once you hit the submit button it will perform validation as per the validation 
 
 You can provide initial values if you want to the field of your choice.
 All you need to do is pass an array that looks something like this:
-```js
-	[ {valueKey : value} , {valueKey : value} .....]
+```
+[ {valueKey : value} , {valueKey : value} .....]
 
-    initVals = [ {myText : 'Init Value' , myCheckBox : ['option_2'] }
+initVals = [ {myText : 'Init Value' , myCheckBox : ['option_2'] }
 ```
 
 ## 1.11. Managing Form action
@@ -379,13 +379,13 @@ Well the last thing which the ReactForm takes is an actionConfig object.
 
 **The Structure**
 ```
-    actionConfig = {
-	    submitButtonText: string,
-	    submitButtonLayout: 'right'|'center'|'fullWidth'
-	    submitButtonProps: submitButtonProps,
-	    loaderProps: loaderProps,
-	    actionContent: JSX
-    }
+actionConfig = {
+	submitButtonText: string,
+	submitButtonLayout: 'right'|'center'|'fullWidth'
+	submitButtonProps: submitButtonProps,
+	loaderProps: loaderProps,
+	actionContent: JSX
+}
 ```
     
 
